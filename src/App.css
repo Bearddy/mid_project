@@ -48,7 +48,7 @@
 }
 
 .sign_in_pop_up {
-  display : none;
+  display : block;
   position: fixed;
   width: 720px;
   height: 480px;
@@ -58,11 +58,19 @@
 }
 
 .sign_up_pop_up {
-  display : none;
+  display : block;
   position: fixed;
   width: 720px;
   height: 480px;
   top: 20%;
   left: 20%;
   background-color: rgba(100, 100, 100, 0.8);
+}
+
+.init {
+  display: block;
+}
+
+.after_login {
+  display: none;
 }

@@ -1,47 +1,81 @@
 
 
 import '../App.css';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { useState } from 'react';
+
+import firebase from '../config';
 
 
 
 
+function Sign_in_pop_up(props){
+  const { showSignInPopUp, setShowSignInPopUp, setIsSignIn } = props;
+  const [email, setEmail] = useState(''); 
+  const [password, setPassword] = useState('');
+  
 
-// function googleLogin() {
-//     var provider = new firebase.auth.GoogleAuthProvider();
-//     firebase.auth().signInWithPopup(provider).then(function(result) {
-//         var token = result.credential.accessToken;
-//         var user = result.user;
-//         alert("success", "Login success! Redirecting to index.html");
-//         setTimeout(function() {
-//             window.location.href = "index.html";
-//         }, 1000); 
-
-//     }).catch(function(error) {
-//         var errorCode = error.code;
-//         var errorMessage = error.message;
-//         var email = error.email;
-//         var credential = error.credential;
-//         alert("error", errorMessage);
-//     });
-// }
-
-function Sign_in_pop_up(){
     return (
+      !showSignInPopUp ? <div></div> :
       <div className="sign_in_pop_up">
         <h1>Sign in</h1>
-        <input type="text" placeholder="Email"></input>
-        <input type="password" placeholder="Password"></input>
-        <button className="confirm_signin" onClick={ confirm_signin_btn }>Sign in</button>
-        <button className="google_login">Google</button>
+        <input type="text" className=".signin_email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}></input>
+        <input type="password" className=".signin_password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}></input>
+        <button className="email_login" onClick={ emailLogin }>Sign in</button>
+        <button className="google_login" onClick={ googleLogin }>Google</button>
+        <button classNMame="github_login" onClick={ githubLogin }>Github</button>
       </div>
     );
+
+
+    function googleLogin() {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+          var token = result.credential.accessToken;
+          var user = result.user;
+          alert("success", "Login success! Redirecting to index.html");
+          setShowSignInPopUp(false);
+          setIsSignIn(true);  
+      }).catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          var email = error.email;
+          var credential = error.credential;
+          alert("error", errorMessage);
+      });
+    }
+
+    function githubLogin() {
+      var provider = new firebase.auth.GithubAuthProvider();
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+          var token = result.credential.accessToken;
+          var user = result.user;
+          alert("success", "Login success! Redirecting to index.html");
+          setShowSignInPopUp(false);
+          setIsSignIn(true);  
+      }).catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          var email = error.email;
+          var credential = error.credential;
+          alert("error", errorMessage);
+      });
+    }
+  
+  function emailLogin(){ 
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+        var user = userCredential.user;
+        alert("success", "Login success! Redirecting to index.html");
+        setShowSignInPopUp(false);
+        setIsSignIn(true);
+    })
+    .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        alert("error", errorMessage);
+    });
+  }
 }
 
-function confirm_signin_btn(){
-    const sign_in_pop_up = document.querySelector('.sign_in_pop_up');
-    sign_in_pop_up.style.display = 'none';
-}
 
 export default Sign_in_pop_up;
