@@ -22,7 +22,7 @@ function Sign_in_pop_up(props){
         <input type="password" className=".signin_password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}></input>
         <button className="email_login" onClick={ emailLogin }>Sign in</button>
         <button className="google_login" onClick={ googleLogin }>Google</button>
-        <button classNMame="github_login" onClick={ githubLogin }>Github</button>
+        <button className="github_login" onClick={ githubLogin }>Github</button>
       </div>
     );
 
