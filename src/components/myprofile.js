@@ -9,10 +9,11 @@ function My_profile(props) {
     const [ profileData, setProfileData ] = useState({});
 
     useEffect(() => {
-        // Subscribe to auth state changes
+        
         const getProfile = () => {
-            console.log({ showMyProfile });
+            
             if(showMyProfile == true){
+                console.log("showMyProfile is true");
                 const user = firebase.auth().currentUser;
                 if (user) {
                     const uid = user.uid;
@@ -43,7 +44,7 @@ function My_profile(props) {
     
     
     return (
-        showMyProfile ? <div><p>sdbfskdbflsbdfl</p></div> :
+        !showMyProfile ? <></> :
         <div>
             <p>{ profileData.name }</p>
             <p>{ profileData.email }</p>

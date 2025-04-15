@@ -22,13 +22,15 @@ function Sign_up_pop_up(props){
         .then((userCredential) => {
             // Signed in 
             var user = userCredential.user;
+            
             alert("success");
+            
             setShowSignUpPopUp(false); 
         })
         .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
-            alert("error", errorMessage);
+            alert(errorMessage);
         });  
     }
 
