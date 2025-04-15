@@ -24,6 +24,10 @@ function Making_channel(props){
           alert("Please enter a channel name");
           return;
         }
+        else if(/^[a-zA-Z0-9\s]+$/.test(channelName) == false){
+            alert("Please enter a valid channel name");
+            return;
+        }
 
         //need channel's unqiue key
         const channelId = firebase.database().ref('channels').push().key;

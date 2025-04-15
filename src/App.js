@@ -28,6 +28,7 @@ function App() {
   const [showChannelNameInput, setShowChannelNameInput] = useState(false);
   const [joinedChannel, setJoinedChannel] = useState([]);
   const [showJoinChannelInput , setShowJoinChannelInput] = useState(false);
+  const [userCurrentChannelId, setUserCurrentChannelId] = useState("");
   const [showChannelContent, setShowChannelContent] = useState(false);
 
 
@@ -216,6 +217,9 @@ function App() {
               channels: userData.channels,
               current_channel: id,
           };
+
+          setUserData(post_data);
+          setUserCurrentChannelId(id);
           
           userRef.set(post_data)
           .then(() => {

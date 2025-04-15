@@ -25,6 +25,11 @@ function Joining_channel(props){
           alert("Please enter a channel id");
           return;
         }
+        else if("/^[a-zA-Z0-9\s]+$/".test(inputChannelId) == false){
+            alert("Please enter a valid channel id");
+            return;
+        }
+
         const dbRef = firebase.database().ref('channels/' + inputChannelId); //get data
         dbRef.once('value').then((snapshot) => {
           const data = snapshot.val();
