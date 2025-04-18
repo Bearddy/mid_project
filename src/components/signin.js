@@ -23,7 +23,7 @@ function Sign_in_pop_up(props){
         <input type="password" className=".signin_password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}></input>
         <button className="email_login" onClick={ emailLogin }>Sign in</button>
         <button className="google_login" onClick={ googleLogin }>Google</button>
-        <button className="github_login" onClick={ githubLogin }>Github</button>
+        {/* <button className="github_login" onClick={ githubLogin }>Github</button> */}
         <button className="cancel_signin" onClick={ () => setShowSignInPopUp(false) }>Cancel</button>
         </div>
       </div>
@@ -47,22 +47,22 @@ function Sign_in_pop_up(props){
       });
     }
 
-    function githubLogin() {
-      var provider = new firebase.auth.GithubAuthProvider();
-      firebase.auth().signInWithPopup(provider).then(function(result) {
-          var token = result.credential.accessToken;
-          var user = result.user;
-          alert("success", "Login success! Redirecting to index.html");
-          setShowSignInPopUp(false);
-          setIsSignIn(true);  
-      }).catch(function(error) {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          var email = error.email;
-          var credential = error.credential;
-          alert("error", errorMessage);
-      });
-    }
+    // function githubLogin() {
+    //   var provider = new firebase.auth.GithubAuthProvider();
+    //   firebase.auth().signInWithPopup(provider).then(function(result) {
+    //       var token = result.credential.accessToken;
+    //       var user = result.user;
+    //       alert("success", "Login success! Redirecting to index.html");
+    //       setShowSignInPopUp(false);
+    //       setIsSignIn(true);  
+    //   }).catch(function(error) {
+    //       var errorCode = error.code;
+    //       var errorMessage = error.message;
+    //       var email = error.email;
+    //       var credential = error.credential;
+    //       alert("error", errorMessage);
+    //   });
+    // }
   
   function emailLogin(){ 
     firebase.auth().signInWithEmailAndPassword(email, password)

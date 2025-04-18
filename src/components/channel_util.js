@@ -18,8 +18,8 @@ function Channel_utils(props) {
     return (
     isSignIn ?
     <div className="channel-utils">
-        <button onClick={ channel_name_desicion }>create chat_channel</button>
-        <button onClick={ input_channel_id }>join chat_channel</button>
+        <button onClick={ channel_name_desicion }>create</button>
+        <button onClick={ input_channel_id }>join</button>
     </div>
     :
     <></>

@@ -14,6 +14,7 @@ import Joined_channels from './components/joined_channels';
 import Account_util from './components/account_util';
 import Send_message from './components/send_msg';
 import Channel_messages from './components/show_msg';
+import Other_profile from './components/otherprofile';
 
 import firebase from './config';
 
@@ -37,7 +38,8 @@ function App() {
   const [userCurrentChannelId, setUserCurrentChannelId] = useState("");
   const [showChannelContent, setShowChannelContent] = useState(false);
   const [ messages, setMessages ] = useState([]);
-
+  const [ otherData, setOtherData ] = useState({});
+  const [showOtherData, setShowOtherData] = useState(false);
 
   useEffect(() => {
     const unsubscribeAuth = firebase.auth().onAuthStateChanged((user) => {
@@ -96,6 +98,7 @@ function App() {
       <Sign_in_pop_up showSignInPopUp={showSignInPopUp} setShowSignInPopUp={setShowSignInPopUp} setIsSignIn={setIsSignIn}/>
       <Sign_up_pop_up showSignUpPopUp={showSignUpPopUp} setShowSignUpPopUp={setShowSignUpPopUp}/>
       <My_profile showMyProfile={showMyProfile} setShowMyProfile={setShowMyProfile} userData={userData} setUserData={setUserData}/>
+      <Other_profile showOtherData={showOtherData} otherData={otherData} setShowOtherData={setShowOtherData} />
       <Making_channel userData={userData} setUserData={setUserData} joinedChannel={joinedChannel} setJoinedChannel={setJoinedChannel} showChannelNameInput={showChannelNameInput} setShowChannelNameInput={setShowChannelNameInput}  />
       <Joining_channel userData={userData} setUserData={setUserData} joinedChannel={joinedChannel} setJoinedChannel={setJoinedChannel} showJoinChannelInput={showJoinChannelInput} setShowJoinChannelInput={setShowJoinChannelInput}/>
       <div className="toolbar">
@@ -106,7 +109,7 @@ function App() {
         <Joined_channels isSignIn={isSignIn} joinedChannel={joinedChannel} userData={userData} setUserData={setUserData} setUserCurrentChannelId={setUserCurrentChannelId} setShowChannelContent={setShowChannelContent} setMessages={setMessages} userCurrentChannelId={userCurrentChannelId}/>
       </div>
       <div className="main_content">
-        <Channel_messages userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} messages={messages} setMessages={setMessages} />
+        <Channel_messages userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} messages={messages} setMessages={setMessages} setOtherData={setOtherData} setShowOtherData={setShowOtherData} setShowMyProfile={setShowMyProfile} />
         <Send_message userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} />
       </div>
 
