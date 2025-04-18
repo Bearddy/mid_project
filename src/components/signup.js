@@ -9,11 +9,14 @@ function Sign_up_pop_up(props){
 
     return (
         !showSignUpPopUp ? <div></div> :
-        <div className="sign_up_pop_up">
+        <div className="sign_up_pop_up-container">
+            <div className="sign_up_pop_up">
             <h1>Sign up</h1>
             <input type="text" value={ email } onChange={e => setEmail(e.target.value)}></input>
             <input type="password" value={ password } onChange={e => setPassword(e.target.value)}></input>
             <button className="confirm_signup" onClick={confirm_signup}>Comfirm</button>
+            <button className="cancel_signup" onClick={ () => setShowSignUpPopUp(false) }>Cancel</button>
+            </div>
         </div>
     );
 

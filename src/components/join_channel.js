@@ -11,10 +11,12 @@ function Joining_channel(props){
     const [inputChannelId, setInputChannelId] = useState('');
     return(
     showJoinChannelInput ?
-    <div>
+    <div className="join-channel-container">
+      <div className="join-channel">
         <input type="text" placeholder="Channel id" value={ inputChannelId } onChange={ e => setInputChannelId(e.target.value) }/>
         <button onClick={ join_channel }>Join</button>
         <button onClick={ cancel_join_channel }>Cancel</button>
+      </div>
     </div>
     :
     <></>
@@ -25,10 +27,8 @@ function Joining_channel(props){
           alert("Please enter a channel id");
           return;
         }
-        else if("/^[a-zA-Z0-9\s]+$/".test(inputChannelId) == false){
-            alert("Please enter a valid channel id");
-            return;
-        }
+
+        
 
         const dbRef = firebase.database().ref('channels/' + inputChannelId); //get data
         dbRef.once('value').then((snapshot) => {

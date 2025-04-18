@@ -9,10 +9,12 @@ function Making_channel(props){
     const [channelName, setChannelName] = useState('');
     return (
         showChannelNameInput ?
-        <div>
+        <div className="create-channel-container">
+          <div className="create-channel">
             <input type="text" placeholder="Channel name" value={ channelName } onChange={ e => setChannelName(e.target.value) }/>
             <button onClick={ create_channel }>Create</button>
             <button onClick={ cancel_create_channel }>Cancel</button>
+          </div>
         </div>
         :
         <></> 
@@ -39,6 +41,8 @@ function Making_channel(props){
           created_date: new Date().toString(),
           members: userData.uid,
         }
+
+
         
         const dbRef = firebase.database().ref('channels/' + channelId); //get data of database
         dbRef.set(post_data)
@@ -46,7 +50,34 @@ function Making_channel(props){
           console.log("Data saved successfully.");
           setJoinedChannel([...joinedChannel, channelId + ":" + channelName]); //I made channel, so I must joined this channel
           setShowChannelNameInput(false);
-    
+
+          // const messages_data = {
+          //   sender: "test",
+          //   components: "teste",
+          //   src: "test",
+          //   time: "test",
+          // }
+
+          // const messageRef = firebase.database().ref('messages/' + channelId); //get data of database
+          // messageRef.once('value').then((snapshot) => {
+          //   console.log("messageRef: ", messageRef);
+          //   const messageData = snapshot.val();
+          //   console.log("messageData: ", messageData);
+          //   if(messageData == null){
+          //     messageRef.set(messages_data).then(() => {
+          //       console.log("Data saved successfully.");
+          //     }
+          //     ).catch((error) => { 
+          //       console.error("Error saving data: ", error);
+          //     });
+          //   }
+          //   else {
+          //     messageRef.push(messages_data);
+          //   }
+          // }).catch((error) => { 
+          //   console.error("Error saving data: ", error);
+          // });
+
         })
         .catch((error) => {
           console.error("Error saving data: ", error);
