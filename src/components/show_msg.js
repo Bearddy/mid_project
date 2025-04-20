@@ -6,6 +6,7 @@ import firebase from '../config';
 function Channel_messages(props){
     const {userData, showChannelContent, isSignIn, messages, setMessages, setShowOtherData, setOtherData, setShowMyProfile} = props;
     const boxRef = useRef(null);
+    const initialLoadDone = useRef(false);
     const [avatarMap, setAvatarMap] = useState({});
     const [names, setNames] = useState({});
 
@@ -19,7 +20,27 @@ function Channel_messages(props){
             .database()
             .ref(`messages/${userData.current_channel.split(':')[0]}`);
     
+        initialLoadDone.current = false;
         setMessages([]);
+
+        messageRef
+        .once('value')
+        .then(snapshot => {
+            const initial = [];
+            snapshot.forEach(child => {
+                const msg = child.val();
+                initial.push({
+                    name:    msg.username,
+                    sender:  msg.sender,
+                    content: msg.content,
+                    message: msg.message,
+                    time:    msg.time,
+                    messageId: child.key,
+                });
+            });
+            setMessages(initial);
+            initialLoadDone.current = true;
+        });
     
         const onChildAdded = messageRef.on('child_added', snapshot => {
             
@@ -31,15 +52,53 @@ function Channel_messages(props){
                 content: msg.content,
                 message: msg.message,
                 time: msg.time,
+                messageId: snapshot.key,
             }]);
+            console.log("snapshot_key: ", snapshot.key);
+            const msg_or_pic = msg.content == "picture" ? "picture" : msg.message;
+            if(initialLoadDone.current){
+                if(msg.sender == userData.uid) return;
+                if(Notification.permission !== "granted"){
+                    Notification.requestPermission().then((permission) => {
+                        if(permission === "granted"){
+                            const notification = new Notification(`from ${userData.current_channel.split(":")[1]} : ${names[msg.sender]}`, {
+                                body: msg_or_pic,
+                                icon: avatarMap[msg.sender] || DEFAULT_AVATAR,
+                            });
+                        }
+                    });
+                }
+                else {
+                    const notification = new Notification(`from ${userData.current_channel.split(":")[1]} : ${names[msg.sender]}`, {
+                        body: msg_or_pic,
+                        icon: avatarMap[msg.sender] || DEFAULT_AVATAR,
+                    });
+                }   
+            }
 
             // console.log("msg: ", msg);
 
+        });
+
+        const onChildRemoved = messageRef.on('child_removed', snap => {
+            console.log("snap: ", snap.val());  
+            const removedId = snap.key;
+            // Option A: reload entire list
+            // messageRef.once('value').then(snap2 => {
+            //   const all = [];
+            //   snap2.forEach(c => all.push({ ...c.val(), messageId: c.key }));
+            //   setMessages(all);
+            // });
+        
+            // Option B: just prune that one out of state
+            setMessages(prev => prev.filter(m => m.messageId !== removedId));
+            // note: no notifications here
         });
     
         // cleanup when channel closes or user switches
         return () => {
             messageRef.off('child_added', onChildAdded);
+            messageRef.off('child_removed', onChildRemoved);
         };
         }
     }, [isSignIn, showChannelContent, userData.current_channel]);
@@ -109,6 +168,20 @@ function Channel_messages(props){
         });
     }
 
+    function unsend_message(messageId){
+        const messageRef = firebase.database().ref(`messages/${userData.current_channel.split(':')[0]}/${messageId}`);
+        console.log("messageId: ", messageId);
+        console.log("id : ", userData.current_channel.split(':')[0]);
+        console.log("path : ", `messages/${userData.current_channel.split(':')[0]}/${messageId}`);
+        messageRef.remove()
+        .then(() => {
+            console.log("Message removed successfully.");
+        })
+        .catch((error) => {
+            console.error("Error removing message: ", error);
+        });
+    }
+
     return (
         showChannelContent ? 
         <div className="channel-messages" ref={boxRef}>
@@ -135,10 +208,24 @@ function Channel_messages(props){
                             </span>
                             <span className="message-timestamp">{m.time}</span>
                         </div>
-                        <div className="message-content">
+                        <div className="message-content" onContextMenu={(e) => {
+                            e.preventDefault();
+                            if(isMine){
+                                unsend_message(m.messageId);
+                            }
+                            
+                            }}>
                             {
                                 m.content == "picture" ?
-                                <img src={m.message} alt="image" className="message-image" />:
+                                <img src={m.message} alt="image" className="message-image" /> :
+                                m.content == "video" ?
+                                <video controls className="message-video">
+                                    <source src={m.message} type="video/mp4" />
+                                </video> :
+                                m.content == "link" ?
+                                <a href={m.message} target="_blank" rel="noopener noreferrer" className="message-link">
+                                    {m.message}
+                                </a> :
                                 <span>{m.message}</span>
                             }
                         </div>

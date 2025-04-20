@@ -116,7 +116,7 @@ function App() {
       <div className="main_content">
         <Main_content_message isSignIn={isSignIn} joinedChannel={joinedChannel}/>
         <Channel_messages userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} messages={messages} setMessages={setMessages} setOtherData={setOtherData} setShowOtherData={setShowOtherData} setShowMyProfile={setShowMyProfile} />
-        <Send_message userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} />
+        <Send_message userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} create_custom_alert={create_custom_alert} />
       </div>
 
     </div>

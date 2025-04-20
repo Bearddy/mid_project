@@ -5,7 +5,7 @@ import firebase from '../config';
 
 
 function Send_message(props){
-    const { userData, showChannelContent, isSignIn } = props;
+    const { userData, showChannelContent, isSignIn, create_custom_alert } = props;
 
     const fileInputRef = useRef(null);
     const [message, setMessage] = useState('');
@@ -18,6 +18,15 @@ function Send_message(props){
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
+        
+        console.log(file);
+        const ext = file.name.split('.').pop().toLowerCase();
+        const picture_ext = ['jpg', 'jpeg', 'png', 'gif'];
+        const video_ext = ['mp4', 'avi', 'mov', 'wmv'];
+        if (picture_ext.indexOf(ext) === -1 && video_ext.indexOf(ext) === -1) {
+            create_custom_alert("error", 0, "File type not supported", "Please upload a picture or video file", null);
+            return;
+        }
     
         // 1) Create a reference to 'uploads/your‑filename'
         const uploadRef = storage.ref(`uploads/${file.name}`);
@@ -43,7 +52,12 @@ function Send_message(props){
                     fileInputRef.current.value = "";
                   }
                 setDownloadURL(url);
-                send_picture(url);
+                if(picture_ext.includes(ext)){
+                    send_picture(url);
+                }
+                else if(video_ext.includes(ext)){
+                    send_video(url);
+                }
             });
 
           }
@@ -89,7 +103,8 @@ function Send_message(props){
         }
 
         const channelId = userData.current_channel.split(':')[0]; //get current channel id
-        const message_data = {
+        let message_data = {};
+        message_data = {
             username: userData.name,
             sender: userData.uid,
             content: "picture",
@@ -98,7 +113,10 @@ function Send_message(props){
         }
 
         const messageRef = firebase.database().ref('messages/' + channelId); //get data of database
-        messageRef.push(message_data)
+        const messageId = messageRef.push().key; //get message id
+        const messageRefId = firebase.database().ref('messages/' + channelId + '/' + messageId); //get data of database
+        message_data.messageId = messageId; //add message id to message data
+        messageRefId.set(message_data)
         .then(() => {
             console.log("Message sent successfully.");
         })
@@ -109,28 +127,82 @@ function Send_message(props){
         setDownloadURL(''); //clear input field
     }
 
-    function send_message(){    
-        if(message == ""){
+    function send_video(url){
+        if(url == ""){
             return;
         }
 
         const channelId = userData.current_channel.split(':')[0]; //get current channel id
-        const message_data = {
+        let message_data = {};
+        message_data = {
             username: userData.name,
             sender: userData.uid,
-            content: "message",
-            message: message,
+            content: "video",
+            message: url,
             time: new Date().toString(),
         }
 
         const messageRef = firebase.database().ref('messages/' + channelId); //get data of database
-        messageRef.push(message_data)
+        const messageId = messageRef.push().key; //get message id
+        const messageRefId = firebase.database().ref('messages/' + channelId + '/' + messageId); //get data of database
+        message_data.messageId = messageId; //add message id to message data
+        messageRefId.set(message_data)
         .then(() => {
             console.log("Message sent successfully.");
         })
         .catch((error) => {
             console.error("Error sending message: ", error);
         });
+
+
+        setDownloadURL(''); //clear input field
+    }
+
+    function send_message(){    
+        if(message == ""){
+            return;
+        }
+        
+        const channelId = userData.current_channel.split(':')[0]; //get current channel id
+        let message_data = {};
+
+        if(message[0] == "h" && message[1] == "t" && message[2] == "t" && message[3] == "p" && message[4] == "s" && message[5] == ":" && message[6] == "/" && message[7] == "/"){
+            message_data = {
+                username: userData.name,
+                sender: userData.uid,
+                content: "link",
+                message: message,
+                time: new Date().toString(),
+            }
+        }
+        else{
+            message_data = {
+                username: userData.name,
+                sender: userData.uid,
+                content: "message",
+                message: message,
+                time: new Date().toString(),
+            }
+        }
+
+
+
+        const messageRef = firebase.database().ref('messages/' + channelId); //get data of database
+        const messageId = messageRef.push().key; //get message id
+        const messageRefId = firebase.database().ref('messages/' + channelId + '/' + messageId); //get data of database
+        message_data.messageId = messageId; //add message id to message data
+        messageRefId.set(message_data)
+        .then(() => {
+            console.log("Message sent successfully.");
+        })
+        .catch((error) => {
+            console.error("Error sending message: ", error);
+        });
+
+        
+        
+
+
 
         setMessage(''); //clear input field
 
