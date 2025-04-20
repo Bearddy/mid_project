@@ -1,13 +1,17 @@
 
 import '../App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import firebase from '../config';
 
 function My_profile(props) {
     const { showMyProfile, setShowMyProfile, userData, setUserData } = props;
     const [ profileData, setProfileData ] = useState({});
+    const [progress, setProgress] = useState(0);
+    const [downloadURL, setDownloadURL] = useState("");
+    const fileInputRef = useRef(null);
 
+    const storage = firebase.storage();
     // useEffect(() => {
         
     //     const getProfile = () => {
@@ -46,6 +50,52 @@ function My_profile(props) {
     }, [showMyProfile, userData]);
     
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+    
+        // 1) Create a reference to 'uploads/your‑filename'
+        const uploadRef = storage.ref(`uploads/${file.name}`);
+    
+        // 2) Start the upload
+        const uploadTask = uploadRef.put(file);
+    
+        // 3) Listen for state changes, errors, and completion
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // calculate & show progress
+            const pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgress(Math.round(pct));
+          },
+          (error) => {
+            console.error("Upload failed:", error);
+          },
+          () => {
+            // completed successfully → get the download URL
+            uploadRef.getDownloadURL().then((url) => {
+              setDownloadURL(url);
+
+
+                setProfileData(prev => ({
+                    ...prev,
+                    profile_image: url
+                }));
+                console.log("downloadURL: ", url);
+                // const userRef = firebase.database().ref('users/' + profileData.uid);
+                // userRef.update({ profile_image: url })
+                // .then(() => {
+                //     console.log("Data saved successfully.");
+                // })
+                // .catch((error) => {
+                //     console.error("Error saving data: ", error);
+                // });
+            });
+
+          }
+        );
+      };
+
     function save_data(){
         const data = {
             uid: profileData.uid,
@@ -83,11 +133,28 @@ function My_profile(props) {
                 name: e.target.value
                 }))}/>
                 <p>{ profileData.email }</p>
+                <span> profile image: </span>
+                <div className="show-profile-image-container"> 
+                <img src={ !profileData.profile_image ? "https://firebasestorage.googleapis.com/v0/b/ss-mid-912fd.firebasestorage.app/o/uploads%2Fquestion-mark-2061539_1280.png?alt=media&token=43836751-1267-4e95-9ca9-d333ca9c20dd" : profileData.profile_image } alt="profile" className="show-profile-image" onClick={() => {
+                    if(progress > 100 && progress < 0) {
+                        return;
+                    }
+
+                    fileInputRef.current?.click()
+                    }} />
+                </div>
                 <p>Created Date : { profileData.created_date }</p>
                 {/* <p>{ userData.profile_image }</p> */}
-                <button onClick={save_data}>Save</button>
-                <button onClick={ () => setShowMyProfile(false) }>Close</button>
+                <button onClick={save_data} disabled={progress > 100 && progress < 0}>Save</button>
+                <button onClick={ () => setShowMyProfile(false) } disabled={progress > 100 && progress < 0}>Close</button>
             </div>
+
+            <input
+                ref={fileInputRef}
+                type="file"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+            />
         </div>
     );
 
