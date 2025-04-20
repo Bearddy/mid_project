@@ -278,7 +278,7 @@
   border: 1px solid black;
 }
 
-.my-profile-container, .other-profile-container {
+.my-profile-container, .other-profile-container{
   width: 100%;
   height: 100%;
   background-color: rgba(100, 100, 100, 0.8);
@@ -302,6 +302,32 @@
   border: 1px solid black;
   
 }
+
+.custom-alert-container {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(100, 100, 100, 0.8);
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+
+.custom-alert {
+  position: fixed;
+  width: 40%;
+  height: 20%;
+  top: 35%;
+  left: 30%;
+  background-color: rgba(255, 255, 255, 1);
+  z-index: 201;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
 
 
 /* .channel-messages .message.mine {

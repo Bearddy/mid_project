@@ -15,6 +15,8 @@ import Account_util from './components/account_util';
 import Send_message from './components/send_msg';
 import Channel_messages from './components/show_msg';
 import Other_profile from './components/otherprofile';
+import Custom_alert from './components/custom_alert';
+import Main_content_message from './components/main_content_msg';
 
 import firebase from './config';
 
@@ -40,6 +42,8 @@ function App() {
   const [ messages, setMessages ] = useState([]);
   const [ otherData, setOtherData ] = useState({});
   const [showOtherData, setShowOtherData] = useState(false);
+  const [showCustomAlert, setShowCustomAlert] = useState(false);
+  const [alertDetail, setAlertDetail] = useState({});
 
   useEffect(() => {
     const unsubscribeAuth = firebase.auth().onAuthStateChanged((user) => {
@@ -95,26 +99,49 @@ function App() {
   
   return (
     <div>
-      <Sign_in_pop_up showSignInPopUp={showSignInPopUp} setShowSignInPopUp={setShowSignInPopUp} setIsSignIn={setIsSignIn}/>
-      <Sign_up_pop_up showSignUpPopUp={showSignUpPopUp} setShowSignUpPopUp={setShowSignUpPopUp}/>
+      <Custom_alert showAlert={showCustomAlert} setShowAlert={setShowCustomAlert} alertDetail={alertDetail} setAlertDetail={setAlertDetail} />
+      <Sign_in_pop_up showSignInPopUp={showSignInPopUp} setShowSignInPopUp={setShowSignInPopUp} setIsSignIn={setIsSignIn} create_custom_alert={create_custom_alert}/>
+      <Sign_up_pop_up showSignUpPopUp={showSignUpPopUp} setShowSignUpPopUp={setShowSignUpPopUp} create_custom_alert={create_custom_alert}/>
       <My_profile showMyProfile={showMyProfile} setShowMyProfile={setShowMyProfile} userData={userData} setUserData={setUserData}/>
       <Other_profile showOtherData={showOtherData} otherData={otherData} setShowOtherData={setShowOtherData} />
-      <Making_channel userData={userData} setUserData={setUserData} joinedChannel={joinedChannel} setJoinedChannel={setJoinedChannel} showChannelNameInput={showChannelNameInput} setShowChannelNameInput={setShowChannelNameInput}  />
-      <Joining_channel userData={userData} setUserData={setUserData} joinedChannel={joinedChannel} setJoinedChannel={setJoinedChannel} showJoinChannelInput={showJoinChannelInput} setShowJoinChannelInput={setShowJoinChannelInput}/>
+      <Making_channel userData={userData} setUserData={setUserData} joinedChannel={joinedChannel} setJoinedChannel={setJoinedChannel} showChannelNameInput={showChannelNameInput} setShowChannelNameInput={setShowChannelNameInput}  create_custom_alert={create_custom_alert}/>
+      <Joining_channel userData={userData} setUserData={setUserData} joinedChannel={joinedChannel} setJoinedChannel={setJoinedChannel} showJoinChannelInput={showJoinChannelInput} setShowJoinChannelInput={setShowJoinChannelInput} create_custom_alert={create_custom_alert}/>
       <div className="toolbar">
         <Account_util isSignIn={isSignIn} userData={userData} setShowSignInPopUp={setShowSignInPopUp} setShowSignUpPopUp={setShowSignUpPopUp} showMyProfile={showMyProfile} setShowMyProfile={setShowMyProfile} clear_all_state={clear_all_state} />
         <Channel_utils isSignIn={isSignIn} setShowJoinChannelInput={setShowJoinChannelInput} setShowChannelNameInput={setShowChannelNameInput}/>
       </div>
       <div className="sidebar">
-        <Joined_channels isSignIn={isSignIn} joinedChannel={joinedChannel} userData={userData} setUserData={setUserData} setUserCurrentChannelId={setUserCurrentChannelId} setShowChannelContent={setShowChannelContent} setMessages={setMessages} userCurrentChannelId={userCurrentChannelId}/>
+        <Joined_channels isSignIn={isSignIn} joinedChannel={joinedChannel} userData={userData} setUserData={setUserData} setUserCurrentChannelId={setUserCurrentChannelId} setShowChannelContent={setShowChannelContent} setMessages={setMessages} userCurrentChannelId={userCurrentChannelId} create_custom_alert={create_custom_alert}/>
       </div>
       <div className="main_content">
+        <Main_content_message isSignIn={isSignIn} joinedChannel={joinedChannel}/>
         <Channel_messages userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} messages={messages} setMessages={setMessages} setOtherData={setOtherData} setShowOtherData={setShowOtherData} setShowMyProfile={setShowMyProfile} />
         <Send_message userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} />
       </div>
 
     </div>
   );
+
+  function create_custom_alert(type, time, title, description, call_back){
+    
+    const messages = {
+      type: type,
+      title: title,
+      description: description,
+    }
+    setAlertDetail(messages);
+
+    setShowCustomAlert(true);
+    if(type == "notice"){
+      setTimeout(() => {
+        setShowCustomAlert(false);
+        setAlertDetail({});
+        call_back();
+      }, time * 1000);
+    }
+
+    
+  }
 
 
   function clear_all_state(){

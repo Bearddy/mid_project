@@ -5,11 +5,18 @@ import { useState } from 'react';
 import firebase from '../config';
 
 function Making_channel(props){
-    const { userData, setUserData, joinedChannel, setJoinedChannel, showChannelNameInput, setShowChannelNameInput } = props;
+    const { userData, setUserData, joinedChannel, setJoinedChannel, showChannelNameInput, setShowChannelNameInput, create_custom_alert } = props;
     const [channelName, setChannelName] = useState('');
     return (
         showChannelNameInput ?
-        <div className="create-channel-container">
+        <div className="create-channel-container" onKeyDown={ e => { 
+          if(e.key === "Enter"){
+            create_channel();
+          }
+          else if(e.key === "Escape"){
+            cancel_create_channel();
+          }
+          }}>
           <div className="create-channel">
             <input type="text" placeholder="Channel name" value={ channelName } onChange={ e => setChannelName(e.target.value) }/>
             <button onClick={ create_channel }>Create</button>
@@ -23,11 +30,11 @@ function Making_channel(props){
 
     function create_channel(){
         if(channelName == ""){
-          alert("Please enter a channel name");
+          create_custom_alert("error", 0, "Error creating channel", "Please enter a channel name", null);
           return;
         }
-        else if(/^[a-zA-Z0-9\s]+$/.test(channelName) == false){
-            alert("Please enter a valid channel name");
+        else if(channelName.includes(":") || channelName.includes(",")){
+            create_custom_alert("error", 0, "Error Creating Channel", "Don't put \":\" or \",\"", null);
             return;
         }
 

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import firebase from '../config';
 
 function Joined_channels(props){
-    const { isSignIn, joinedChannel, userData, setUserData, setUserCurrentChannelId, setShowChannelContent, setMessages, userCurrentChannelId } = props;
+    const { isSignIn, joinedChannel, userData, setUserData, setUserCurrentChannelId, setShowChannelContent, setMessages, userCurrentChannelId, create_custom_alert } = props;
     const [ channelContent, setChannelContent ] = useState([]);
 
     // const prevSignInRef = useRef(isSignIn);
@@ -31,10 +31,15 @@ function Joined_channels(props){
       <div className="joined-channels">
           {
           joinedChannel.length == 0 ?
-          <p>Try to Create Channels!</p>
+          <></>
           :
           joinedChannel.map((channelInfo, index) => (
-              <button key={index} onClick={ () => every_channel_event(channelInfo) } onContextMenu={(e) => {e.preventDefault(); alert(channelInfo.split(":")[0]);}} >{channelInfo.split(":")[1]}</button>
+              <button key={index} onClick={ () => every_channel_event(channelInfo) } onContextMenu={(e) => {
+                e.preventDefault(); 
+                const channelId = channelInfo.split(":")[0]; 
+                console.log("channelId: ", channelId);
+                create_custom_alert("confirm", 0, "Channel Id", channelId, null)
+              }} >{channelInfo.split(":")[1]}</button>
           ))
           }
       </div>

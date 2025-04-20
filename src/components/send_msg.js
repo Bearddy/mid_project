@@ -10,7 +10,11 @@ function Send_message(props){
     return(
         showChannelContent ? 
         <div className="send-messages">
-            <input type="text" placeholder="Message" value={message} onChange={(e) => setMessage(e.target.value)} />
+            <input type="text" placeholder="Message" value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    send_message();
+                }
+            }} />
             <button onClick={ send_message }>Send</button>
         </div>
         :

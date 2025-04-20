@@ -3,13 +3,20 @@ import firebase from '../config';
 import { useState } from 'react';
 
 function Sign_up_pop_up(props){
-    const { showSignUpPopUp, setShowSignUpPopUp } = props;
+    const { showSignUpPopUp, setShowSignUpPopUp, create_custom_alert } = props;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     return (
         !showSignUpPopUp ? <div></div> :
-        <div className="sign_up_pop_up-container">
+        <div className="sign_up_pop_up-container" onKeyDown={ (e) => { 
+            if(e.key === "Enter"){
+              confirm_signup();
+            }
+            else if(e.key === "Escape"){
+                setShowSignUpPopUp(false);
+            }
+            }}>
             <div className="sign_up_pop_up">
             <h1>Sign up</h1>
             <input type="text" value={ email } onChange={e => setEmail(e.target.value)}></input>
@@ -26,14 +33,13 @@ function Sign_up_pop_up(props){
             // Signed in 
             var user = userCredential.user;
             
-            alert("success");
+            create_custom_alert("notice", 2, "Sign up success!", "closed after 2 seconds", () => {setShowSignUpPopUp(false);});
             
-            setShowSignUpPopUp(false); 
         })
         .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
-            alert(errorMessage);
+            create_custom_alert("error", 0, "Error signing up", errorMessage, null);
         });  
     }
 

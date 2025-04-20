@@ -3,17 +3,26 @@ import '../App.css';
 import { useState } from 'react';
 
 import firebase from '../config';
+import { reauthenticateWithCredential } from 'firebase/auth';
 
     
 
 function Joining_channel(props){
-    const { userData, setUserData, joinedChannel, setJoinedChannel, showJoinChannelInput, setShowJoinChannelInput } = props;
+    const { userData, setUserData, joinedChannel, setJoinedChannel, showJoinChannelInput, setShowJoinChannelInput, create_custom_alert } = props;
     const [inputChannelId, setInputChannelId] = useState('');
     return(
     showJoinChannelInput ?
     <div className="join-channel-container">
       <div className="join-channel">
-        <input type="text" placeholder="Channel id" value={ inputChannelId } onChange={ e => setInputChannelId(e.target.value) }/>
+        <input type="text" placeholder="Channel id" value={ inputChannelId } onChange={ e => setInputChannelId(e.target.value) } onKeyDown={
+          (e) => { 
+            if(e.key === "Enter"){
+              join_channel();
+            }
+            else if(e.key === "Escape"){
+              cancel_join_channel();
+            }
+        }}/>
         <button onClick={ join_channel }>Join</button>
         <button onClick={ cancel_join_channel }>Cancel</button>
       </div>
@@ -24,8 +33,18 @@ function Joining_channel(props){
 
     function join_channel(){
         if(inputChannelId == ""){
-          alert("Please enter a channel id");
+          console.log("joined channel id: ", joinedChannel); 
+          create_custom_alert("error", 0, "Please enter a channel id", "Error joining channel", null);
           return;
+        }
+
+        //already joined this channel
+
+        for(let channels of joinedChannel){
+          if(channels.split(":")[0] == inputChannelId){
+            create_custom_alert("error", 0, "You already joined this channel", "Error joining channel", null);
+            return;
+          }
         }
 
         
@@ -97,7 +116,7 @@ function Joining_channel(props){
             });
           }
           else{
-            alert("Channel not found");
+            create_custom_alert("error", 0, "Channel not found", "Error joining channel", null);
           }
         })
         .catch((error) => {
