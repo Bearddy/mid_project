@@ -39,7 +39,10 @@ function Send_message(props){
           () => {
             // completed successfully → get the download URL
             uploadRef.getDownloadURL().then((url) => {
-              setDownloadURL(url);
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                  }
+                setDownloadURL(url);
                 send_picture(url);
             });
 

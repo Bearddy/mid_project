@@ -82,6 +82,9 @@ function My_profile(props) {
                     profile_image: url
                 }));
                 console.log("downloadURL: ", url);
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
                 // const userRef = firebase.database().ref('users/' + profileData.uid);
                 // userRef.update({ profile_image: url })
                 // .then(() => {
@@ -136,7 +139,7 @@ function My_profile(props) {
                 <span> profile image: </span>
                 <div className="show-profile-image-container"> 
                 <img src={ !profileData.profile_image ? "https://firebasestorage.googleapis.com/v0/b/ss-mid-912fd.firebasestorage.app/o/uploads%2Fquestion-mark-2061539_1280.png?alt=media&token=43836751-1267-4e95-9ca9-d333ca9c20dd" : profileData.profile_image } alt="profile" className="show-profile-image" onClick={() => {
-                    if(progress > 100 && progress < 0) {
+                    if(progress < 100 && progress > 0) {
                         return;
                     }
 
@@ -145,8 +148,8 @@ function My_profile(props) {
                 </div>
                 <p>Created Date : { profileData.created_date }</p>
                 {/* <p>{ userData.profile_image }</p> */}
-                <button onClick={save_data} disabled={progress > 100 && progress < 0}>Save</button>
-                <button onClick={ () => setShowMyProfile(false) } disabled={progress > 100 && progress < 0}>Close</button>
+                <button onClick={save_data} disabled={progress < 100 && progress > 0}>Save</button>
+                <button onClick={ () => setShowMyProfile(false) } disabled={progress < 100 && progress > 0}>Close</button>
             </div>
 
             <input
