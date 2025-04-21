@@ -142,6 +142,9 @@ function App() {
         call_back();
       }, time * 1000);
     }
+    else {
+      call_back();
+    }
 
     
   }
@@ -161,6 +164,14 @@ function App() {
     setIsSignIn(false);
     setShowChannelContent(false);
     setMessages([]);
+    setOtherData({});
+    setShowOtherData(false);
+    setShowCustomAlert(false);
+    setAlertDetail({});
+    setFoundMessages([]);
+    setFoundIndex(0);
+    setHighlightGreen({});
+    
   }
   
 }

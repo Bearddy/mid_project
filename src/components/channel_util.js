@@ -1,5 +1,5 @@
 import '../App.css';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import firebase from '../config';
 
@@ -7,6 +7,8 @@ function Channel_utils(props) {
     const { isSignIn, setShowJoinChannelInput, setShowChannelNameInput, messages, setFoundMessages, foundIndex, setFoundIndex, foundMessages, setHighlightGreen } = props;
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searching, setSearching] = useState(false);
+
+    const inputRef = useRef(null);
 
     function input_channel_id(){
         setShowJoinChannelInput(true);
@@ -24,7 +26,7 @@ function Channel_utils(props) {
         
         messages.forEach((msg) => {
             // console.log("msg: ", msg);
-            if(msg.content == "message"){
+            if(msg.content == "message" || msg.content == "link"){
                 if(msg.message.toLowerCase().includes(searchKeyword.toLowerCase()) && msg.messageId != undefined){
                     setFoundMessages(prev => [...prev, msg]);
                     // flag = true;
@@ -46,7 +48,7 @@ function Channel_utils(props) {
     <div className="channel-utils">
         <button onClick={ channel_name_desicion }>create</button>
         <button onClick={ input_channel_id }>join</button>
-        <input type="text" value={searchKeyword} onChange={(e) => {
+        <input type="text" ref={inputRef} value={searchKeyword} onChange={(e) => {
             setSearchKeyword(e.target.value)
             setFoundIndex(0);
         }
@@ -60,6 +62,7 @@ function Channel_utils(props) {
                     setFoundIndex(0);
                     setHighlightGreen({});
                     setSearching(false); 
+                    inputRef.current.blur();                    
                 }
             }   
         }/>
@@ -69,9 +72,10 @@ function Channel_utils(props) {
             setFoundIndex(0);
             setHighlightGreen({});
             setSearching(false); 
+            
         }}>cancel</button>
         {
-            searching ? <span>{ 
+            searching ? <span className="searching-message">{ 
                 isNaN(((foundIndex-1)%foundMessages.length + foundMessages.length) % foundMessages.length + 1) ? 0 : (((foundIndex-1)%foundMessages.length + foundMessages.length) % foundMessages.length + 1)
             }/{foundMessages.length}</span> : <></>
         }

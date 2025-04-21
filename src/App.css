@@ -422,3 +422,8 @@
   overflow: hidden;
   border-radius: 50%;
 }
+
+.searching-message {
+  background-color: lightblue;
+  
+}
