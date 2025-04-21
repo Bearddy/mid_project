@@ -73,7 +73,7 @@ function Channel_messages(props){
                 // found: isFound,
             }]);
             console.log("snapshot_key: ", snapshot.key);
-            const msg_or_pic = msg.content == "picture" ? "picture" : msg.message;
+            const msg_or_pic = msg.content == "picture" ? "picture" : msg.content == "video" ? "video" : msg.message;
             if(initialLoadDone.current){
                 if(msg.sender == userData.uid) return;
                 if(Notification.permission !== "granted"){
@@ -135,7 +135,7 @@ function Channel_messages(props){
 
         // we'll collect cleanup functions here
         const offFns = [];
-        console.log("aklsnfnlsdnflkndskflnskldnfndksdnfksdnf");
+        // console.log("aklsnfnlsdnflkndskflnskldnfndksdnfksdnf");
 
         uids.forEach(uid => {
             const ref = firebase.database().ref(`users/${uid}`);
@@ -235,9 +235,10 @@ function Channel_messages(props){
                     const isMine = m.sender === userData.uid;
                     const avatarUrl = avatarMap[m.sender] || DEFAULT_AVATAR;
                     const name = names[m.sender] || m.name || "Unknown User";
-                    const highlightClass = foundMessages.some(foundMsg => foundMsg.messageId === m.messageId) ? ' found-message' : '';
-                    const highlightGreenClass = highlighGreen && highlighGreen.messageId === m.messageId ? ' found-message-green' : ''; 
-                    console.log("highlightClass: ", highlightClass);
+                    const highlightClass = foundMessages.some(foundMsg => foundMsg.messageId === m.messageId && m.messageId != undefined) ? ' found-message' : '';
+                    const highlightGreenClass = (highlighGreen.messageId != undefined && highlighGreen.messageId === m.messageId) ? ' found-message-green' : ''; 
+                    // console.log(highlighGreen, ": ", m, " | ", highlighGreen.messageId, ": ", m.messageId, " | ",  highlighGreen.messageId === m.messageId);
+                    
 
                   
                     return (

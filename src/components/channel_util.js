@@ -25,7 +25,7 @@ function Channel_utils(props) {
         messages.forEach((msg) => {
             // console.log("msg: ", msg);
             if(msg.content == "message"){
-                if(msg.message.toLowerCase().includes(searchKeyword.toLowerCase())){
+                if(msg.message.toLowerCase().includes(searchKeyword.toLowerCase()) && msg.messageId != undefined){
                     setFoundMessages(prev => [...prev, msg]);
                     // flag = true;
                 }
@@ -54,6 +54,12 @@ function Channel_utils(props) {
             (e) => {
                 if (e.key === 'Enter') {
                     search_message();
+                }
+                else if (e.key === 'Escape') {
+                    setFoundMessages([]);
+                    setFoundIndex(0);
+                    setHighlightGreen({});
+                    setSearching(false); 
                 }
             }   
         }/>

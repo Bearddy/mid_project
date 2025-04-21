@@ -13,6 +13,9 @@ function Account_util(props){
     return (
     isSignIn ? 
     <div className="account_util">
+        <div className="toolbar-profile-image-container">
+            <img src={userData.profile_image} className="toolbar-profile-image" alt="profile" onClick={profile_event}></img>
+        </div>
         <button className="user_name" onClick={ profile_event }>{userData.name}</button>
         <button className="sign_out_btn" onClick={ sign_out_event }>Sign out</button>
     </div>
