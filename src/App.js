@@ -44,6 +44,9 @@ function App() {
   const [showOtherData, setShowOtherData] = useState(false);
   const [showCustomAlert, setShowCustomAlert] = useState(false);
   const [alertDetail, setAlertDetail] = useState({});
+  const [foundMessages, setFoundMessages] = useState([]);
+  const [foundIndex, setFoundIndex] = useState(0);
+  const [highlighGreen, setHighlightGreen] = useState({});
 
   useEffect(() => {
     const unsubscribeAuth = firebase.auth().onAuthStateChanged((user) => {
@@ -108,14 +111,14 @@ function App() {
       <Joining_channel userData={userData} setUserData={setUserData} joinedChannel={joinedChannel} setJoinedChannel={setJoinedChannel} showJoinChannelInput={showJoinChannelInput} setShowJoinChannelInput={setShowJoinChannelInput} create_custom_alert={create_custom_alert}/>
       <div className="toolbar">
         <Account_util isSignIn={isSignIn} userData={userData} setShowSignInPopUp={setShowSignInPopUp} setShowSignUpPopUp={setShowSignUpPopUp} showMyProfile={showMyProfile} setShowMyProfile={setShowMyProfile} clear_all_state={clear_all_state} />
-        <Channel_utils isSignIn={isSignIn} setShowJoinChannelInput={setShowJoinChannelInput} setShowChannelNameInput={setShowChannelNameInput}/>
+        <Channel_utils isSignIn={isSignIn} setShowJoinChannelInput={setShowJoinChannelInput} setShowChannelNameInput={setShowChannelNameInput} messages={messages} setFoundMessages={setFoundMessages} foundIndex={foundIndex} setFoundIndex={setFoundIndex} foundMessages={foundMessages} setHighlightGreen={setHighlightGreen}/>
       </div>
       <div className="sidebar">
         <Joined_channels isSignIn={isSignIn} joinedChannel={joinedChannel} userData={userData} setUserData={setUserData} setUserCurrentChannelId={setUserCurrentChannelId} setShowChannelContent={setShowChannelContent} setMessages={setMessages} userCurrentChannelId={userCurrentChannelId} create_custom_alert={create_custom_alert}/>
       </div>
       <div className="main_content">
         <Main_content_message isSignIn={isSignIn} joinedChannel={joinedChannel}/>
-        <Channel_messages userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} messages={messages} setMessages={setMessages} setOtherData={setOtherData} setShowOtherData={setShowOtherData} setShowMyProfile={setShowMyProfile} />
+        <Channel_messages userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} messages={messages} setMessages={setMessages} setOtherData={setOtherData} setShowOtherData={setShowOtherData} setShowMyProfile={setShowMyProfile} foundMessages={foundMessages} foundIndex={foundIndex} setFoundIndex={setFoundIndex} highlighGreen={highlighGreen} setHighlightGreen={setHighlightGreen}/>
         <Send_message userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} create_custom_alert={create_custom_alert} />
       </div>
 

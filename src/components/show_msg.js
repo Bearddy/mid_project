@@ -2,16 +2,25 @@ import '../App.css';
 import { useState, useEffect, useRef } from 'react';
 
 import firebase from '../config';
+import { set } from 'firebase/database';
 
 function Channel_messages(props){
-    const {userData, showChannelContent, isSignIn, messages, setMessages, setShowOtherData, setOtherData, setShowMyProfile} = props;
+    const {userData, showChannelContent, isSignIn, messages, setMessages, setShowOtherData, setOtherData, setShowMyProfile, foundMessages, foundIndex, setFoundIndex, highlighGreen, setHighlightGreen} = props;
     const boxRef = useRef(null);
     const initialLoadDone = useRef(false);
     const [avatarMap, setAvatarMap] = useState({});
     const [names, setNames] = useState({});
-
+    
     const DEFAULT_AVATAR = "https://firebasestorage.googleapis.com/v0/b/ss-mid-912fd.firebasestorage.app/o/uploads%2Fquestion-mark-2061539_1280.png?alt=media&token=43836751-1267-4e95-9ca9-d333ca9c20dd";
     
+    const scrollToElementEnd = el => {
+        if (!el) return;
+        const box = boxRef.current;
+        // scroll so that el's bottom aligns with box bottom
+        const offset = el.offsetTop + el.offsetHeight - box.clientHeight;
+        box.scrollTop = offset;
+    };
+
     useEffect(() => {
 
     
@@ -27,15 +36,20 @@ function Channel_messages(props){
         .once('value')
         .then(snapshot => {
             const initial = [];
+            
             snapshot.forEach(child => {
                 const msg = child.val();
+                // const isFound = foundMessages.some(foundMsg => foundMsg.messageId === child.key);
+                // console.log(isFound);
                 initial.push({
                     name:    msg.username,
                     sender:  msg.sender,
                     content: msg.content,
                     message: msg.message,
                     time:    msg.time,
-                    messageId: child.key,
+                    messageId: msg.messageId,
+                    test: "test",
+                    // found: isFound,
                 });
             });
             setMessages(initial);
@@ -45,6 +59,8 @@ function Channel_messages(props){
         const onChildAdded = messageRef.on('child_added', snapshot => {
             
             const msg = snapshot.val();
+            // const isFound = foundMessages.some(foundMsg => foundMsg.messageId === snapshot.key);
+
 
             setMessages(prev => [...prev, {
                 name: msg.username,
@@ -52,7 +68,9 @@ function Channel_messages(props){
                 content: msg.content,
                 message: msg.message,
                 time: msg.time,
-                messageId: snapshot.key,
+                messageId: msg.messageId,
+                test: "test",
+                // found: isFound,
             }]);
             console.log("snapshot_key: ", snapshot.key);
             const msg_or_pic = msg.content == "picture" ? "picture" : msg.message;
@@ -103,6 +121,8 @@ function Channel_messages(props){
         }
     }, [isSignIn, showChannelContent, userData.current_channel]);
     
+
+
     useEffect(() => {
         const box = boxRef.current;
         if (box) {
@@ -115,6 +135,7 @@ function Channel_messages(props){
 
         // we'll collect cleanup functions here
         const offFns = [];
+        console.log("aklsnfnlsdnflkndskflnskldnfndksdnfksdnf");
 
         uids.forEach(uid => {
             const ref = firebase.database().ref(`users/${uid}`);
@@ -140,6 +161,28 @@ function Channel_messages(props){
         // cleanup whenever `messages` changes (or component unmounts)
         return () => offFns.forEach(fn => fn());
     }, [messages]);
+
+    useEffect(() => {
+        if (!boxRef.current || !Array.isArray(foundMessages) || !foundMessages.length) return;
+        // find the last found message in the list
+        // const lastFound = foundMessages[foundMessages.length - 1];
+        const found = foundMessages[foundIndex];
+
+        setHighlightGreen(foundMessages[foundIndex]);
+
+        const el = boxRef.current.querySelector(`[data-id="${found.messageId}"]`);
+        scrollToElementEnd(el);
+
+        if(foundIndex < foundMessages.length - 1) {
+            setFoundIndex(foundIndex + 1);
+        }
+        else {
+            setFoundIndex(0);
+        }
+
+      }, [foundMessages]);
+
+
 
     
     function show_other_data(uid){
@@ -192,9 +235,13 @@ function Channel_messages(props){
                     const isMine = m.sender === userData.uid;
                     const avatarUrl = avatarMap[m.sender] || DEFAULT_AVATAR;
                     const name = names[m.sender] || m.name || "Unknown User";
+                    const highlightClass = foundMessages.some(foundMsg => foundMsg.messageId === m.messageId) ? ' found-message' : '';
+                    const highlightGreenClass = highlighGreen && highlighGreen.messageId === m.messageId ? ' found-message-green' : ''; 
+                    console.log("highlightClass: ", highlightClass);
+
                   
                     return (
-                      <div key={i} className={isMine ? "message mine" : "message"}>
+                      <div key={i} className={`message${isMine ? ' mine' : ''}`} data-id={m.messageId}>
                         <div className="message-header">
                             <div className="message-profile-image-container">
                                 <img
@@ -208,7 +255,7 @@ function Channel_messages(props){
                             </span>
                             <span className="message-timestamp">{m.time}</span>
                         </div>
-                        <div className="message-content" onContextMenu={(e) => {
+                        <div className={`message-content ${highlightClass} ${highlightGreenClass}`} onContextMenu={(e) => {
                             e.preventDefault();
                             if(isMine){
                                 unsend_message(m.messageId);

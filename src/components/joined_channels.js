@@ -97,6 +97,7 @@ function Joined_channels(props){
                         content: message.content,
                         message: message.message,
                         time: message.time,
+                        messageId: message.messageId,
                     };
                 });
                 setMessages(messages_data);

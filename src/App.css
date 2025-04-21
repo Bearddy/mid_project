@@ -401,6 +401,11 @@
   white-space: nowrap;
 }
 
-/* .channel-messages .message.mine {
-  text-align : right;
-} */
+.found-message {
+  background-color: yellow;
+  
+}
+
+.found-message-green {
+  background-color: lightgreen;
+}
