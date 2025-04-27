@@ -79,7 +79,7 @@ function Channel_messages(props){
                 if(Notification.permission !== "granted"){
                     Notification.requestPermission().then((permission) => {
                         if(permission === "granted"){
-                            const notification = new Notification(`from ${userData.current_channel.split(":")[1]} : ${names[msg.sender]}`, {
+                            const notification = new Notification(`from ${userData.current_channel.split(":")[1]} : ${msg.username}`, {
                                 body: msg_or_pic,
                                 icon: avatarMap[msg.sender] || DEFAULT_AVATAR,
                             });
@@ -87,7 +87,7 @@ function Channel_messages(props){
                     });
                 }
                 else {
-                    const notification = new Notification(`from ${userData.current_channel.split(":")[1]} : ${names[msg.sender]}`, {
+                    const notification = new Notification(`from ${userData.current_channel.split(":")[1]} : ${msg.username}`, {
                         body: msg_or_pic,
                         icon: avatarMap[msg.sender] || DEFAULT_AVATAR,
                     });

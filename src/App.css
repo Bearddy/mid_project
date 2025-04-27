@@ -531,8 +531,8 @@
 .other-profile {
   position: fixed;
   width: 50%;
-  height: 70%;
-  top: 15%;
+  height: 80%;
+  top: 10%;
   left: 25%;
   background-color: rgba(255, 255, 255, 1);
   z-index: 101;
@@ -545,8 +545,8 @@
   .my-profile,
   .other-profile {
     width: 60%;
-    height: 70%;
-    top: 15%;
+    height: 80%;
+    top: 10%;
     left: 20%;
     font-size: 12px;
   }
