@@ -6,7 +6,7 @@ import firebase from '../config';
 
 function Other_profile(props) {
     const { showOtherData, otherData, setShowOtherData } = props;
-    const [ profileData, setProfileData ] = useState({});
+
 
 
     
@@ -18,16 +18,24 @@ function Other_profile(props) {
         !showOtherData ? <></> :
         <div className="other-profile-container">
             <div className="other-profile">
-                <h2> {otherData.name}</h2>
+                <h2> Profile</h2>
                 <span>name : {otherData.name}</span>
-                <p>{ otherData.email }</p>
+                <br></br>
+                <span> email : {otherData.showing_email}</span>
+                <br></br>
+                <span> phone number : {otherData.phone_number}</span>
+                <br></br>
+                <span> address : {otherData.address}</span>
+                <br></br>
                 <span> profile image: </span>
                 <div className="show-profile-image-container"> 
                 <img src={ !otherData.profile_image ? "https://firebasestorage.googleapis.com/v0/b/ss-mid-912fd.firebasestorage.app/o/uploads%2Fquestion-mark-2061539_1280.png?alt=media&token=43836751-1267-4e95-9ca9-d333ca9c20dd" : otherData.profile_image} alt="profile" className="show-profile-image" ></img>
                 </div>
-                <p>Created Date : { otherData.created_date }</p>
+                <p>Created Date : { 
+                `${new Date(otherData.created_date).getFullYear()}/${["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"][new Date(otherData.created_date).getMonth()]}/${new Date(otherData.created_date).getDate()} ${new Date(otherData.created_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                 }</p>
                 {/* <p>{ userData.profile_image }</p> */}
-                <button onClick={ () => setShowOtherData(false) }>Close</button>
+                <button className="btn-text" onClick={ () => setShowOtherData(false) }>Close</button>
             </div>
         </div>
     );

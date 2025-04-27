@@ -1,5 +1,5 @@
 import '../App.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import firebase from '../config';
 
@@ -43,12 +43,21 @@ function Channel_utils(props) {
         
     }
 
+    useEffect(() => {
+        if(!isSignIn) setSearching(false);
+
+    }, [isSignIn]);
+
     return (
     isSignIn ?
     <div className="channel-utils">
-        <button onClick={ channel_name_desicion }>create</button>
-        <button onClick={ input_channel_id }>join</button>
-        <input type="text" ref={inputRef} value={searchKeyword} onChange={(e) => {
+        <button onClick={ channel_name_desicion } className="create_channel_btn btn-icon">
+            <img src={require('../images/create_channel.png')} alt="create_channel" className="create_channel_icon" />
+        </button>
+        <button onClick={ input_channel_id } className="join_channel_btn btn-icon">
+            <img src={require('../images/join_channel.png')} alt="join_channel" className="join_channel_icon" />
+        </button>
+        <input type="text" class="search_messages" ref={inputRef} value={searchKeyword} onChange={(e) => {
             setSearchKeyword(e.target.value)
             setFoundIndex(0);
         }
@@ -66,14 +75,18 @@ function Channel_utils(props) {
                 }
             }   
         }/>
-        <button onClick={search_message}>search</button>
+        <button onClick={search_message} className="search_message_btn btn-icon">
+            <img src={require('../images/search.png')} alt="search" className="search_icon" />
+        </button>
         <button onClick={() => {
             setFoundMessages([]);
             setFoundIndex(0);
             setHighlightGreen({});
             setSearching(false); 
             
-        }}>cancel</button>
+        }} className="cancel_search_btn btn-icon">
+            <img src={require('../images/cancel.png')} alt="cancel" className="cancel_icon" />
+        </button>
         {
             searching ? <span className="searching-message">{ 
                 isNaN(((foundIndex-1)%foundMessages.length + foundMessages.length) % foundMessages.length + 1) ? 0 : (((foundIndex-1)%foundMessages.length + foundMessages.length) % foundMessages.length + 1)

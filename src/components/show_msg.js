@@ -5,7 +5,7 @@ import firebase from '../config';
 import { set } from 'firebase/database';
 
 function Channel_messages(props){
-    const {userData, showChannelContent, isSignIn, messages, setMessages, setShowOtherData, setOtherData, setShowMyProfile, foundMessages, foundIndex, setFoundIndex, highlighGreen, setHighlightGreen} = props;
+    const {userData, showChannelContent, isSignIn, messages, setMessages, setShowOtherData, setOtherData, setShowMyProfile, foundMessages, foundIndex, setFoundIndex, highlighGreen, setHighlightGreen, create_custom_alert} = props;
     const boxRef = useRef(null);
     const initialLoadDone = useRef(false);
     const [avatarMap, setAvatarMap] = useState({});
@@ -200,6 +200,9 @@ function Channel_messages(props){
                     profile_image: data.profile_image,
                     channels: data.channels,
                     current_channel: data.current_channel,
+                    showing_email: data.showing_email,
+                    phone_number: data.phone_number,
+                    address: data.address,
                 }
                 setOtherData(post_data);
 
@@ -229,7 +232,8 @@ function Channel_messages(props){
         showChannelContent ? 
         <div className="channel-messages" ref={boxRef}>
             {
-
+                messages.length == 0 ?
+                <div className="no-messages">No messages yet</div> :
 
                 messages.map((m, i) => {
                     const isMine = m.sender === userData.uid;
@@ -237,6 +241,8 @@ function Channel_messages(props){
                     const name = names[m.sender] || m.name || "Unknown User";
                     const highlightClass = foundMessages.some(foundMsg => foundMsg.messageId === m.messageId && m.messageId != undefined) ? ' found-message' : '';
                     const highlightGreenClass = (highlighGreen.messageId != undefined && highlighGreen.messageId === m.messageId) ? ' found-message-green' : ''; 
+                    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                    const monthNames = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
                     // console.log(highlighGreen, ": ", m, " | ", highlighGreen.messageId, ": ", m.messageId, " | ",  highlighGreen.messageId === m.messageId);
                     
 
@@ -254,13 +260,18 @@ function Channel_messages(props){
                             <span className="message-username" onClick={() => isMine ? setShowMyProfile(true) : show_other_data(m.sender)}>
                                 {name}
                             </span>
-                            <span className="message-timestamp">{m.time}</span>
+                            <span className="message-timestamp">{
+                                `${new Date(m.time).getFullYear()}/${monthNames[new Date(m.time).getMonth()]}/${new Date(m.time).getDate()} ${new Date(m.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                                
+
+                            }</span>
                         </div>
                         <div className={`message-content ${highlightClass} ${highlightGreenClass}`} onContextMenu={(e) => {
                             e.preventDefault();
                             if(isMine){
+                                create_custom_alert("confirm", 0, "Are you sure you want to unsend this message?", m.content == "picture" ? "A picture" : m.content == "video" ? "A video" : m.message , null, () => {
                                 unsend_message(m.messageId);
-                            }
+                            })}
                             
                             }}>
                             {

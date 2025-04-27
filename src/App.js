@@ -47,6 +47,7 @@ function App() {
   const [foundMessages, setFoundMessages] = useState([]);
   const [foundIndex, setFoundIndex] = useState(0);
   const [highlighGreen, setHighlightGreen] = useState({});
+  const [confirmFunction , setConfirmFunction] = useState(null);
 
   useEffect(() => {
     const unsubscribeAuth = firebase.auth().onAuthStateChanged((user) => {
@@ -64,9 +65,12 @@ function App() {
                 email: user.email,
                 created_date: new Date().toString(),
                 last_login_date: new Date().toString(),
-                profile_image: "",
+                profile_image: "https://firebasestorage.googleapis.com/v0/b/ss-mid-912fd.firebasestorage.app/o/uploads%2Fquestion-mark-2061539_1280.png?alt=media&token=f34d6313-0529-4bec-8fcd-4f40b9117591",
                 channels: "",
                 current_channel: "",
+                showing_email: "",
+                phone_number: "",
+                address: "",
               }; 
               
               setUserData(post_data); //saves in state to use
@@ -102,7 +106,7 @@ function App() {
   
   return (
     <div>
-      <Custom_alert showAlert={showCustomAlert} setShowAlert={setShowCustomAlert} alertDetail={alertDetail} setAlertDetail={setAlertDetail} />
+      <Custom_alert showAlert={showCustomAlert} setShowAlert={setShowCustomAlert} alertDetail={alertDetail} setAlertDetail={setAlertDetail} confirmFunction={confirmFunction}/>
       <Sign_in_pop_up showSignInPopUp={showSignInPopUp} setShowSignInPopUp={setShowSignInPopUp} setIsSignIn={setIsSignIn} create_custom_alert={create_custom_alert}/>
       <Sign_up_pop_up showSignUpPopUp={showSignUpPopUp} setShowSignUpPopUp={setShowSignUpPopUp} create_custom_alert={create_custom_alert}/>
       <My_profile showMyProfile={showMyProfile} setShowMyProfile={setShowMyProfile} userData={userData} setUserData={setUserData}/>
@@ -118,14 +122,14 @@ function App() {
       </div>
       <div className="main_content">
         <Main_content_message isSignIn={isSignIn} joinedChannel={joinedChannel}/>
-        <Channel_messages userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} messages={messages} setMessages={setMessages} setOtherData={setOtherData} setShowOtherData={setShowOtherData} setShowMyProfile={setShowMyProfile} foundMessages={foundMessages} foundIndex={foundIndex} setFoundIndex={setFoundIndex} highlighGreen={highlighGreen} setHighlightGreen={setHighlightGreen}/>
+        <Channel_messages userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} messages={messages} setMessages={setMessages} setOtherData={setOtherData} setShowOtherData={setShowOtherData} setShowMyProfile={setShowMyProfile} foundMessages={foundMessages} foundIndex={foundIndex} setFoundIndex={setFoundIndex} highlighGreen={highlighGreen} setHighlightGreen={setHighlightGreen} create_custom_alert={create_custom_alert}/>
         <Send_message userData={userData} showChannelContent={showChannelContent} isSignIn={isSignIn} create_custom_alert={create_custom_alert} />
       </div>
 
     </div>
   );
 
-  function create_custom_alert(type, time, title, description, call_back){
+  function create_custom_alert(type, time, title, description, call_back, confirm_function){
     
     const messages = {
       type: type,
@@ -143,7 +147,10 @@ function App() {
       }, time * 1000);
     }
     else {
-      call_back();
+      if(type == "confirm"){
+        setConfirmFunction(() => confirm_function);
+      }
+      // call_back();
     }
 
     

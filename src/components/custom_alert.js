@@ -4,7 +4,7 @@ import { useState } from 'react';
 import firebase from '../config';
 
 function Custom_alert(props) {
-    const {showAlert, setShowAlert, alertDetail, setAlertDetail} = props;
+    const {showAlert, setShowAlert, alertDetail, setAlertDetail, confirmFunction} = props;
 
     function close_alert() {
         setShowAlert(false);
@@ -19,12 +19,15 @@ function Custom_alert(props) {
                 <p>{alertDetail.description}</p>
                 {
                     alertDetail.type == "error" ? 
-                        <button className="custom-alert-btn" onClick={close_alert}>Close</button>
+                        <button className="custom-alert-btn btn-text btn-text" onClick={close_alert}>Close</button>
                     :
                     alertDetail.type == "confirm" ?
                         (<>
-                            <button className="custom-alert-btn" onClick={close_alert}>Ok</button>
-                            <button className="custom-alert-btn" onClick={close_alert}>Close</button>
+                            <button className="custom-alert-btn btn-text" onClick={() => {
+                                confirmFunction();
+                                close_alert();
+                            }}>Ok</button>
+                            <button className="custom-alert-btn btn-text" onClick={close_alert}>Close</button>
                         </>)
                     :
                     <></>

@@ -19,10 +19,10 @@ function Sign_up_pop_up(props){
             }}>
             <div className="sign_up_pop_up">
             <h1>Sign up</h1>
-            <input type="text" value={ email } onChange={e => setEmail(e.target.value)}></input>
-            <input type="password" value={ password } onChange={e => setPassword(e.target.value)}></input>
-            <button className="confirm_signup" onClick={confirm_signup}>Comfirm</button>
-            <button className="cancel_signup" onClick={ () => setShowSignUpPopUp(false) }>Cancel</button>
+            <input type="text" value={ email } onChange={e => setEmail(e.target.value)} className='signup_email'></input>
+            <input type="password" value={ password } onChange={e => setPassword(e.target.value)} className='signup_password'></input>
+            <button className="confirm_signup btn-text" onClick={confirm_signup}>Comfirm</button>
+            <button className="cancel_signup btn-text" onClick={ () => setShowSignUpPopUp(false) }>Cancel</button>
             </div>
         </div>
     );

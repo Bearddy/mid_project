@@ -70,7 +70,7 @@ function Send_message(props){
         <div className="send-messages">
             <button
                 type="button"
-                className="send-pic-btn"
+                className="send-pic-btn btn-text"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={progress > 0 && progress < 100}
             >
@@ -82,7 +82,9 @@ function Send_message(props){
                     send_message();
                 }
             }} />
-            <button onClick={ send_message }>Send</button>
+            <button onClick={ send_message } className="send-btn btn-icon">
+                <img src={require('../images/send.png')} alt="send" className="send-icon" />
+            </button>
 
 
             <input

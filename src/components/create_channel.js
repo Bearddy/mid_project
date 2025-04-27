@@ -19,8 +19,8 @@ function Making_channel(props){
           }}>
           <div className="create-channel">
             <input type="text" placeholder="Channel name" value={ channelName } onChange={ e => setChannelName(e.target.value) }/>
-            <button onClick={ create_channel }>Create</button>
-            <button onClick={ cancel_create_channel }>Cancel</button>
+            <button onClick={ create_channel } className="btn-text">Create</button>
+            <button onClick={ cancel_create_channel } className="btn-text">Cancel</button>
           </div>
         </div>
         :
@@ -112,6 +112,9 @@ function Making_channel(props){
                 profile_image: data.profile_image,
                 channels: channels,
                 current_channel: userData.current_channel,
+                showing_email: userData.showing_email,
+                phone_number: userData.phone_number,
+                address: userData.address,
             };
             
             userRef.set(post_data)

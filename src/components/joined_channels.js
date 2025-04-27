@@ -38,7 +38,9 @@ function Joined_channels(props){
                 e.preventDefault(); 
                 const channelId = channelInfo.split(":")[0]; 
                 console.log("channelId: ", channelId);
-                create_custom_alert("confirm", 0, "Channel Id", channelId, null)
+                create_custom_alert("confirm", 0, "Channel Id", channelId, null, () => {
+                  copy_id(channelId);
+                })
               }} >{channelInfo.split(":")[1]}</button>
           ))
           }
@@ -66,6 +68,9 @@ function Joined_channels(props){
                 profile_image: data.profile_image,
                 channels: userData.channels,
                 current_channel: id,
+                showing_email: userData.showing_email,
+                phone_number: userData.phone_number,
+                address: userData.address,
             };
   
             setUserData(post_data);
@@ -109,7 +114,10 @@ function Joined_channels(props){
             }
         });
       }
-  
+      
+      function copy_id(id){
+        navigator.clipboard.writeText(id);
+      }
 }
 
 export default Joined_channels;

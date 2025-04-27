@@ -23,8 +23,8 @@ function Joining_channel(props){
               cancel_join_channel();
             }
         }}/>
-        <button onClick={ join_channel }>Join</button>
-        <button onClick={ cancel_join_channel }>Cancel</button>
+        <button className="btn-text" onClick={ join_channel }>Join</button>
+        <button className="btn-text" onClick={ cancel_join_channel }>Cancel</button>
       </div>
     </div>
     :
@@ -101,6 +101,9 @@ function Joining_channel(props){
                 profile_image: userData.profile_image,
                 channels: channels,
                 current_channel: userData.current_channel,
+                showing_email: userData.showing_email,
+                phone_number: userData.phone_number,
+                address: userData.address,
             };
     
             const userRef = firebase.database().ref('users/' + userData.uid);

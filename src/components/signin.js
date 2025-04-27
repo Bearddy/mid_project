@@ -26,12 +26,12 @@ function Sign_in_pop_up(props){
         }}>
         <div className="sign_in_pop_up">
         <h1>Sign in</h1>
-        <input type="text" className=".signin_email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} ></input>
-        <input type="password" className=".signin_password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}></input>
-        <button className="email_login" onClick={ emailLogin }>Sign in</button>
-        <button className="google_login" onClick={ googleLogin }>Google</button>
+        <input type="text" className="signin_email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} ></input>
+        <input type="password" className="signin_password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}></input>
+        <button className="email_login btn-text" onClick={ emailLogin }>Sign in</button>
+        <button className="google_login btn-text" onClick={ googleLogin }>Google</button>
         {/* <button className="github_login" onClick={ githubLogin }>Github</button> */}
-        <button className="cancel_signin" onClick={ () => setShowSignInPopUp(false) }>Cancel</button>
+        <button className="cancel_signin btn-text" onClick={ () => setShowSignInPopUp(false) }>Cancel</button>
         </div>
       </div>
     );

@@ -109,6 +109,9 @@ function My_profile(props) {
             profile_image: profileData.profile_image,
             channels: profileData.channels,
             current_channel: profileData.current_channel,
+            showing_email: profileData.showing_email,
+            phone_number: profileData.phone_number,
+            address: profileData.address,
         }
         console.log("data: ", data);
         const userRef = firebase.database().ref('users/' + profileData.uid);
@@ -129,14 +132,33 @@ function My_profile(props) {
         !showMyProfile ? <></> :
         <div className="my-profile-container">
             <div className="my-profile">
-                <h2> {profileData.name}</h2>
+                {/* <h2> {profileData.name}</h2> */}
+                <h2>My Profile</h2>
                 <span>name : </span>
-                <input type="text" value={ profileData.name } onChange={(e) => setProfileData(prev => ({
+                <input type="text" className='name_data' value={ profileData.name } onChange={(e) => setProfileData(prev => ({
                 ...prev,
                 name: e.target.value
                 }))}/>
-                <p>{ profileData.email }</p>
-                <span> profile image: </span>
+                <br></br>
+                <span>email : </span>
+                <input type="text" className='email_data' value={ profileData.showing_email } onChange={(e) => setProfileData(prev => ({
+                ...prev,
+                showing_email: e.target.value
+                }))}/>
+                <br></br>
+                <span>phone number : </span>
+                <input type="text" className='phone_number_data' value={ profileData.phone_number } onChange={(e) => setProfileData(prev => ({
+                ...prev,
+                phone_number: e.target.value
+                }))}/>
+                <br></br>
+                <span>address : </span>
+                <input type="text" className='address_data' value={ profileData.address } onChange={(e) => setProfileData(prev => ({
+                ...prev,
+                address: e.target.value
+                }))}/>
+                <br></br>
+                <span>profile image: </span>
                 <div className="show-profile-image-container"> 
                 <img src={ !profileData.profile_image ? "https://firebasestorage.googleapis.com/v0/b/ss-mid-912fd.firebasestorage.app/o/uploads%2Fquestion-mark-2061539_1280.png?alt=media&token=43836751-1267-4e95-9ca9-d333ca9c20dd" : profileData.profile_image } alt="profile" className="show-profile-image" onClick={() => {
                     if(progress < 100 && progress > 0) {
@@ -146,10 +168,12 @@ function My_profile(props) {
                     fileInputRef.current?.click()
                     }} />
                 </div>
-                <p>Created Date : { profileData.created_date }</p>
+                <p>Created Date : { 
+                    `${new Date(profileData.created_date).getFullYear()}/${["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"][new Date(profileData.created_date).getMonth()]}/${new Date(profileData.created_date).getDate()} ${new Date(profileData.created_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                }</p>
                 {/* <p>{ userData.profile_image }</p> */}
-                <button onClick={save_data} disabled={progress < 100 && progress > 0}>Save</button>
-                <button onClick={ () => setShowMyProfile(false) } disabled={progress < 100 && progress > 0}>Close</button>
+                <button className="btn-text" onClick={save_data} disabled={progress < 100 && progress > 0}>Save</button>
+                <button className="btn-text" onClick={ () => setShowMyProfile(false) } disabled={progress < 100 && progress > 0}>Close</button>
             </div>
 
             <input
