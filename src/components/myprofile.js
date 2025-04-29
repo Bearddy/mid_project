@@ -172,8 +172,10 @@ function My_profile(props) {
                     `${new Date(profileData.created_date).getFullYear()}/${["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"][new Date(profileData.created_date).getMonth()]}/${new Date(profileData.created_date).getDate()} ${new Date(profileData.created_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
                 }</p>
                 {/* <p>{ userData.profile_image }</p> */}
+                <div className="my-profile-btns">
                 <button className="btn-text" onClick={save_data} disabled={progress < 100 && progress > 0}>Save</button>
                 <button className="btn-text" onClick={ () => setShowMyProfile(false) } disabled={progress < 100 && progress > 0}>Close</button>
+                </div>
             </div>
 
             <input

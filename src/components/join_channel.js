@@ -14,6 +14,7 @@ function Joining_channel(props){
     showJoinChannelInput ?
     <div className="join-channel-container">
       <div className="join-channel">
+        <h1 className="join-channel-header">Join Channel</h1>
         <input type="text" placeholder="Channel id" value={ inputChannelId } onChange={ e => setInputChannelId(e.target.value) } onKeyDown={
           (e) => { 
             if(e.key === "Enter"){
@@ -23,8 +24,10 @@ function Joining_channel(props){
               cancel_join_channel();
             }
         }}/>
-        <button className="btn-text" onClick={ join_channel }>Join</button>
-        <button className="btn-text" onClick={ cancel_join_channel }>Cancel</button>
+        <div className="join-channel-btns">
+          <button className="btn-text" onClick={ join_channel }>Join</button>
+          <button className="btn-text" onClick={ cancel_join_channel }>Cancel</button>
+        </div>
       </div>
     </div>
     :
@@ -125,6 +128,7 @@ function Joining_channel(props){
         .catch((error) => {
           console.error("Error getting data: ", error);
         });
+        setInputChannelId(''); 
         
       }
     
@@ -132,6 +136,7 @@ function Joining_channel(props){
     
       function cancel_join_channel(){
         setShowJoinChannelInput(false);
+        setInputChannelId('');
       }
 
       

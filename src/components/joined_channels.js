@@ -4,11 +4,14 @@ import { useState, useEffect, useRef } from 'react';
 import firebase from '../config';
 
 function Joined_channels(props){
-    const { isSignIn, joinedChannel, userData, setUserData, setUserCurrentChannelId, setShowChannelContent, setMessages, userCurrentChannelId, create_custom_alert } = props;
+    const { isSignIn, joinedChannel, userData, setUserData, setUserCurrentChannelId, setShowChannelContent, setMessages, userCurrentChannelId, create_custom_alert, showChannelMenu, setShowChannelMenu, isMobile } = props;
     const [ channelContent, setChannelContent ] = useState([]);
 
     // const prevSignInRef = useRef(isSignIn);
     const boxRef = useRef(null);
+    const touchTimeout = useRef(null);
+    const isLongPress = useRef(false);
+
 
     // useEffect(() => {
     //   if (!prevSignInRef.current && isSignIn) {
@@ -25,31 +28,95 @@ function Joined_channels(props){
     //   }
     // , [joinedChannel, isSignIn]);
 
-    return(
-    isSignIn ? 
-    <div className="joined-channels-container" ref={boxRef}>
-      <div className="joined-channels">
-          {
-          joinedChannel.length == 0 ?
-          <></>
-          :
-          joinedChannel.map((channelInfo, index) => (
-              <button key={index} onClick={ () => every_channel_event(channelInfo) } onContextMenu={(e) => {
-                e.preventDefault(); 
-                const channelId = channelInfo.split(":")[0]; 
-                console.log("channelId: ", channelId);
-                create_custom_alert("confirm", 0, "Channel Id", channelId, null, () => {
-                  copy_id(channelId);
-                })
-              }} >{channelInfo.split(":")[1]}</button>
-          ))
-          }
-      </div>
-    </div>
-    :
-    <></>
-    );
+    function close_channel_menu() {
+        setShowChannelMenu(false);
+    }
 
+    function handleTouchStart(channelInfo) {
+      // start a timer on touch start
+      touchTimeout.current = setTimeout(() => {
+        isLongPress.current = true;
+        const channelId = channelInfo.split(':')[0];
+        console.log('🔥 long-press detected for', channelId);
+        create_custom_alert(
+          'confirm', 0, 'Channel Id', channelId,
+          null,
+          () => copy_id(channelId)
+        );
+      }, 600);  // you can adjust the delay (ms) to taste
+    }
+    
+    function handleTouchEnd(channelInfo) {
+      // clear timer on touch end/move/cancel
+      if (touchTimeout.current) {
+        clearTimeout(touchTimeout.current);
+        touchTimeout.current = null;
+      }
+      // if it was a long press, don’t also fire onClick
+      if (isLongPress.current) {
+        isLongPress.current = false;
+      }
+    }
+    
+  if(isMobile){
+    // if(!showChannelMenu) return <></>;
+
+    return (
+      <div className={`joined-channels-container-mobile ${showChannelMenu ? 'open' : ''}`} onClick={close_channel_menu}>
+        <div className={`joined-channels-container ${showChannelMenu ? "open" : ""}`} ref={boxRef}>
+          <div className="joined-channels">
+              {
+              joinedChannel.length == 0 ?
+              <></>
+              :
+              joinedChannel.map((channelInfo, index) => (
+                <button
+                  key={index}
+                  onTouchStart={() => handleTouchStart(channelInfo)}
+                  onTouchMove={() => handleTouchEnd(channelInfo)}
+                  onTouchCancel={() => handleTouchEnd(channelInfo)}
+                  onTouchEnd={() => handleTouchEnd(channelInfo)}
+                  onClick={() => {
+                    // only handle normal click if not a long-press
+                    if (!isLongPress.current) {
+                      every_channel_event(channelInfo);
+                      close_channel_menu();
+                    }
+                  }}
+                >
+                {channelInfo.split(':')[1]}
+                </button>
+              ))
+              }
+          </div>
+        </div>
+      </div>
+    )
+  }
+  else{
+    return (
+      <div className="joined-channels-container" ref={boxRef}>
+        <div className="joined-channels">
+            {
+            joinedChannel.length == 0 ?
+            <></>
+            :
+            joinedChannel.map((channelInfo, index) => (
+                <button key={index} onClick={ () => every_channel_event(channelInfo) } onContextMenu={(e) => {
+                  e.preventDefault(); 
+                  const channelId = channelInfo.split(":")[0]; 
+                  console.log("channelId: ", channelId);
+                  create_custom_alert("confirm", 0, "Channel Id", channelId, null, () => {
+                    copy_id(channelId);
+                  })
+                }} >{channelInfo.split(":")[1]}</button>
+            ))
+            }
+        </div>
+      </div>
+    )
+  }
+    
     function every_channel_event(id){
         console.log(id);
         setShowChannelContent(true);

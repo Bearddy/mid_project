@@ -35,7 +35,9 @@ function Other_profile(props) {
                 `${new Date(otherData.created_date).getFullYear()}/${["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"][new Date(otherData.created_date).getMonth()]}/${new Date(otherData.created_date).getDate()} ${new Date(otherData.created_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
                  }</p>
                 {/* <p>{ userData.profile_image }</p> */}
+                <div className="other-profile-btns">
                 <button className="btn-text" onClick={ () => setShowOtherData(false) }>Close</button>
+                </div>
             </div>
         </div>
     );

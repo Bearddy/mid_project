@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from 'react';
 import firebase from '../config';
 
 function Channel_utils(props) {
-    const { isSignIn, setShowJoinChannelInput, setShowChannelNameInput, messages, setFoundMessages, foundIndex, setFoundIndex, foundMessages, setHighlightGreen } = props;
+    const { isSignIn, setShowJoinChannelInput, setShowChannelNameInput, messages, setFoundMessages, foundIndex, setFoundIndex, foundMessages, setHighlightGreen, showChannelMenu, setShowChannelMenu, isMobile } = props;
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searching, setSearching] = useState(false);
-
     const inputRef = useRef(null);
+
+    
+
 
     function input_channel_id(){
         setShowJoinChannelInput(true);
@@ -17,6 +19,12 @@ function Channel_utils(props) {
     function channel_name_desicion(){
         setShowChannelNameInput(true);
     }
+
+    function open_channel_menu(){
+        setShowChannelMenu(!showChannelMenu);
+    }
+
+    
 
     function search_message(){
         let flag = false;
@@ -51,6 +59,9 @@ function Channel_utils(props) {
     return (
     isSignIn ?
     <div className="channel-utils">
+        {isMobile ? <button className="show_channel_btn" onClick={ open_channel_menu }>
+            <img src={require('../images/menu.png')} alt="menu" className="show_channel_icon" />
+        </button> : <></>}
         <button onClick={ channel_name_desicion } className="create_channel_btn btn-icon">
             <img src={require('../images/create_channel.png')} alt="create_channel" className="create_channel_icon" />
         </button>

@@ -18,11 +18,17 @@ function Sign_up_pop_up(props){
             }
             }}>
             <div className="sign_up_pop_up">
-            <h1>Sign up</h1>
-            <input type="text" value={ email } onChange={e => setEmail(e.target.value)} className='signup_email'></input>
-            <input type="password" value={ password } onChange={e => setPassword(e.target.value)} className='signup_password'></input>
-            <button className="confirm_signup btn-text" onClick={confirm_signup}>Comfirm</button>
-            <button className="cancel_signup btn-text" onClick={ () => setShowSignUpPopUp(false) }>Cancel</button>
+                <h1 className='sign_up_header'>Sign up</h1>
+                <input type="text" value={ email } placeholder="Email" onChange={e => setEmail(e.target.value)} className='signup_email'></input>
+                <input type="password" value={ password } placeholder="Password" onChange={e => setPassword(e.target.value)} className='signup_password'></input>
+                <div className="signup_btns">
+                    <button className="confirm_signup btn-text" onClick={confirm_signup}>Comfirm</button>
+                    <button className="cancel_signup btn-text" onClick={ () => {
+                        setShowSignUpPopUp(false);
+                        setEmail("");
+                        setPassword("");
+                        } }>Cancel</button>
+                </div>
             </div>
         </div>
     );
@@ -41,6 +47,8 @@ function Sign_up_pop_up(props){
             var errorMessage = error.message;
             create_custom_alert("error", 0, "Error signing up", errorMessage, null);
         });  
+        setEmail("");
+        setPassword("");
     }
 
 

@@ -17,6 +17,7 @@ function Custom_alert(props) {
             <div className="custom-alert">
                 <h2>{alertDetail.title}</h2>
                 <p>{alertDetail.description}</p>
+                <div className="custom-alert-btns">
                 {
                     alertDetail.type == "error" ? 
                         <button className="custom-alert-btn btn-text btn-text" onClick={close_alert}>Close</button>
@@ -33,6 +34,7 @@ function Custom_alert(props) {
                     <></>
                     
                 }
+                </div>
             </div>
         </div>
         :

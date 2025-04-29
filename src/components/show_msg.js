@@ -11,6 +11,9 @@ function Channel_messages(props){
     const [avatarMap, setAvatarMap] = useState({});
     const [names, setNames] = useState({});
     
+    const longPressTimeout = useRef(null);
+    const longPressTriggered = useRef(false);
+
     const DEFAULT_AVATAR = "https://firebasestorage.googleapis.com/v0/b/ss-mid-912fd.firebasestorage.app/o/uploads%2Fquestion-mark-2061539_1280.png?alt=media&token=43836751-1267-4e95-9ca9-d333ca9c20dd";
     
     const scrollToElementEnd = el => {
@@ -39,6 +42,7 @@ function Channel_messages(props){
             
             snapshot.forEach(child => {
                 const msg = child.val();
+                if (!msg || !msg.messageId || !msg.sender || !msg.time) return;
                 // const isFound = foundMessages.some(foundMsg => foundMsg.messageId === child.key);
                 // console.log(isFound);
                 initial.push({
@@ -59,6 +63,7 @@ function Channel_messages(props){
         const onChildAdded = messageRef.on('child_added', snapshot => {
             
             const msg = snapshot.val();
+            if (!msg || !msg.messageId || !msg.sender || !msg.time) return;
             // const isFound = foundMessages.some(foundMsg => foundMsg.messageId === snapshot.key);
 
 
@@ -183,6 +188,40 @@ function Channel_messages(props){
       }, [foundMessages]);
 
 
+      function handlePressStart(e, m) {
+        // only on touch devices
+        if (e.pointerType !== 'touch') return;
+      
+        longPressTriggered.current = false;
+        longPressTimeout.current = setTimeout(() => {
+          longPressTriggered.current = true;
+          // only allow deletion of your own messages
+          if (m.sender === userData.uid) {
+            create_custom_alert(
+              'confirm',
+              0,
+              'Are you sure you want to unsend this message?',
+              m.content === 'picture'
+                ? 'A picture'
+                : m.content === 'video'
+                  ? 'A video'
+                  : m.message,
+              null,
+              () => unsend_message(m.messageId)
+            );
+          }
+        }, 600);  // long-press if held ≥600ms
+      }
+      
+      function handlePressEnd() {
+        if (longPressTimeout.current) {
+          clearTimeout(longPressTimeout.current);
+          longPressTimeout.current = null;
+        }
+        if (longPressTriggered.current) {
+          longPressTriggered.current = false;
+        }
+      }
 
     
     function show_other_data(uid){
@@ -273,7 +312,9 @@ function Channel_messages(props){
                                 unsend_message(m.messageId);
                             })}
                             
-                            }}>
+                            }} onPointerDown={e => handlePressStart(e, m)}
+                            onPointerUp={handlePressEnd}
+                            onPointerLeave={handlePressEnd}>
                             {
                                 m.content == "picture" ?
                                 <img src={m.message} alt="image" className="message-image" /> :

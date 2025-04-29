@@ -18,9 +18,12 @@ function Making_channel(props){
           }
           }}>
           <div className="create-channel">
+            <h1 className="create-channel-header">Create Channel</h1>
             <input type="text" placeholder="Channel name" value={ channelName } onChange={ e => setChannelName(e.target.value) }/>
-            <button onClick={ create_channel } className="btn-text">Create</button>
-            <button onClick={ cancel_create_channel } className="btn-text">Cancel</button>
+            <div className="create-channel-btns">
+              <button onClick={ create_channel } className="btn-text">Create</button>
+              <button onClick={ cancel_create_channel } className="btn-text">Cancel</button>
+            </div>
           </div>
         </div>
         :
@@ -130,13 +133,14 @@ function Making_channel(props){
           }
         });
     
-    
+        setChannelName('');
       }
     
       
     
       function cancel_create_channel(){
         setShowChannelNameInput(false);
+        setChannelName('');
       }
 }
 

@@ -49,6 +49,18 @@ function App() {
   const [highlighGreen, setHighlightGreen] = useState({});
   const [confirmFunction , setConfirmFunction] = useState(null);
 
+  const [showChannelMenu, setShowChannelMenu] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(
+    window.matchMedia('(max-width: 768px)').matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   useEffect(() => {
     const unsubscribeAuth = firebase.auth().onAuthStateChanged((user) => {
       if(isSignIn == false) return;
@@ -113,12 +125,13 @@ function App() {
       <Other_profile showOtherData={showOtherData} otherData={otherData} setShowOtherData={setShowOtherData} />
       <Making_channel userData={userData} setUserData={setUserData} joinedChannel={joinedChannel} setJoinedChannel={setJoinedChannel} showChannelNameInput={showChannelNameInput} setShowChannelNameInput={setShowChannelNameInput}  create_custom_alert={create_custom_alert}/>
       <Joining_channel userData={userData} setUserData={setUserData} joinedChannel={joinedChannel} setJoinedChannel={setJoinedChannel} showJoinChannelInput={showJoinChannelInput} setShowJoinChannelInput={setShowJoinChannelInput} create_custom_alert={create_custom_alert}/>
+      {isMobile ? <Joined_channels isSignIn={isSignIn} joinedChannel={joinedChannel} userData={userData} setUserData={setUserData} setUserCurrentChannelId={setUserCurrentChannelId} setShowChannelContent={setShowChannelContent} setMessages={setMessages} userCurrentChannelId={userCurrentChannelId} create_custom_alert={create_custom_alert} showChannelMenu={showChannelMenu} setShowChannelMenu={setShowChannelMenu} isMobile={isMobile}/> : <></>}
       <div className="toolbar">
         <Account_util isSignIn={isSignIn} userData={userData} setShowSignInPopUp={setShowSignInPopUp} setShowSignUpPopUp={setShowSignUpPopUp} showMyProfile={showMyProfile} setShowMyProfile={setShowMyProfile} clear_all_state={clear_all_state} />
-        <Channel_utils isSignIn={isSignIn} setShowJoinChannelInput={setShowJoinChannelInput} setShowChannelNameInput={setShowChannelNameInput} messages={messages} setFoundMessages={setFoundMessages} foundIndex={foundIndex} setFoundIndex={setFoundIndex} foundMessages={foundMessages} setHighlightGreen={setHighlightGreen}/>
+        <Channel_utils isSignIn={isSignIn} setShowJoinChannelInput={setShowJoinChannelInput} setShowChannelNameInput={setShowChannelNameInput} messages={messages} setFoundMessages={setFoundMessages} foundIndex={foundIndex} setFoundIndex={setFoundIndex} foundMessages={foundMessages} setHighlightGreen={setHighlightGreen} showChannelMenu={showChannelMenu} setShowChannelMenu={setShowChannelMenu} isMobile={isMobile}/>
       </div>
       <div className="sidebar">
-        <Joined_channels isSignIn={isSignIn} joinedChannel={joinedChannel} userData={userData} setUserData={setUserData} setUserCurrentChannelId={setUserCurrentChannelId} setShowChannelContent={setShowChannelContent} setMessages={setMessages} userCurrentChannelId={userCurrentChannelId} create_custom_alert={create_custom_alert}/>
+        {!isMobile ? <Joined_channels isSignIn={isSignIn} joinedChannel={joinedChannel} userData={userData} setUserData={setUserData} setUserCurrentChannelId={setUserCurrentChannelId} setShowChannelContent={setShowChannelContent} setMessages={setMessages} userCurrentChannelId={userCurrentChannelId} create_custom_alert={create_custom_alert} showChannelMenu={showChannelMenu} setShowChannelMenu={setShowChannelMenu} isMobile={isMobile}/> : <></>}
       </div>
       <div className="main_content">
         <Main_content_message isSignIn={isSignIn} joinedChannel={joinedChannel}/>
