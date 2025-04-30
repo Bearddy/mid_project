@@ -38,7 +38,7 @@
 
 **Before sign in**
 
-**Membership Mechanism (sign in/sign up)**
+1. **Membership Mechanism (sign in/sign up)**
     - There are sign in and sign up button in the top-right of the interface.
     - In sign in, you can use email login with "Sign in" button or use google login with "Sign in With Google" button.
     - In sign up, you can create account using email with "Sign up" button.
