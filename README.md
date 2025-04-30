@@ -52,9 +52,9 @@
     - Click ➕(which is in the top-left of the interface) to create a new private channel.
     - Click a button right to the ➕ to join an existing channel by ID.
     - To know the channel ID, you can right click the channel (desktop) or long-press (mobile), then the alert shows. You can select that and copy or you can just click the confirm button to copy. 
-2. **Chat Interface**
-    - Send **text**, **links**.
-    - Can also send **images**, or **videos**. **(Bonus Components)**
+2. **Chat Mechanism**
+    - Send **text** with send button (airplane shaped). And the texts which contained "https" automatically are converted to links.
+    - Can also send **images**, or **videos** with ➕ button left to the input in the chatroom. **(Bonus Components)**
     - Long‑press (mobile) or right‑click (desktop) your message to unsend.
 3. **Search Messages (Bonus Components)**
     - Right to the join channel button, there is a place you can search message.
