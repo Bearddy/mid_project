@@ -1,70 +1,102 @@
-# Getting Started with Create React App
+# Software Studio 2025 Spring
+## Midterm Project — Chatroom App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Scoring
 
-## Available Scripts
+| **Basic components**                   | **Score** | **Implemented** |
+| :------------------------------------- | :-------: | :-------------:|
+| Membership Mechanism (Email Sign Up/In) |     5%    |       ✔️        |
+| Firebase Hosting                        |     5%    |       ✔️        |
+| Database Read/Write (Auth required)     |    15%    |       ✔️        |
+| Responsive Web Design (RWD)             |    15%    |       ✔️        |
+| Git Version Control                     |     5%    |       ✔️        |
+| Private Group Chatroom                  |    20%    |       ✔️        |
 
-In the project directory, you can run:
+| **Advanced components**                 | **Score** | **Implemented** |
+| :-------------------------------------  | :-------: | :-------------:|
+| React Framework                         |    10%    |       ✔️        |
+| Google Sign-In                          |     1%    |       ✔️        |
+| Chrome Push Notifications               |     5%    |       ✔️        |
+| CSS Animations (modals, scale-ups)      |     2%    |       ✔️        |
+| Script/HTML Injection Handling          |     2%    |       ✔️        |
 
-### `npm start`
+| **Bonus components**                    | **Score** | **Implemented** |
+| :-------------------------------------  | :-------: | :-------------:|
+| User Profile Modal                      |     1%    |       ✔️        |
+| Profile Picture Upload                  |     1%    |       ✔️        |
+| Send Image                              |     1%    |       ✔️        |
+| Send Video                              |     1%    |       ✔️        |
+| Unsend Message (long‑press/context)     |     3%    |       ✔️        |
+| Search for Messages                     |     3%    |       ✔️        |
+| Chatbot                                 |     2%    |       ❌        |
+| Block User                              |     2%    |       ❌        |
+| Send GIF (Tenor API)                    |     3%    |       ❌        |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## How to use
 
-### `npm test`
+**Before sign in**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Membership Mechanism (sign in/sign up)**
+    - There are sign in and sign up button in the top-right of the interface.
+    - In sign in, you can use email login with "Sign in" button or use google login with "Sign in With Google" button.
+    - In sign up, you can create account using email with "Sign up" button.
+    - In both sign in and sign up, if you want to cancel the process, you can click "Cancel" button.
 
-### `npm run build`
+   
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**After sign in**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Create & Join Channels**
+    - Click ➕(which is in the top-left of the interface) to create a new private channel.
+    - Click a button right to the ➕ to join an existing channel by ID.
+    - To know the channel ID, you can right click the channel (desktop) or long-press (mobile), then the alert shows. You can select that and copy or you can just click the confirm button to copy. 
+2. **Chat Interface**
+    - Send **text**, **links**.
+    - Can also send **images**, or **videos**. **(Bonus Components)**
+    - Long‑press (mobile) or right‑click (desktop) your message to unsend.
+3. **Search Messages (Bonus Components)**
+    - Right to the join channel button, there is a place you can search message.
+    - Enter keywords in the search bar and press Enter or press magnifier button (right to the search input).
+    - And then, the messages which the keyword is included are highlighted with yellow and  there is "current index / total count" beside the X button.
+    - Current index message is highlighted with green and you can keep press Enter or magnifier button to go to next index. The scroll is moved automatically.
+    - If you want to cancel the highlight, you can press X button or press Escape.
+5. **Sign out**
+    - If you want to sign out with some purposes, you can click sign out button which is in the top-right of the interface.
+4. **User Profile (Bonus Components)**
+   - Click the profile icon or username in the message to open the modal. And you can also click the button left to the sign out button to open my profile.
+   - In my profile, you can edit name, email, phone, address, and upload profile image.
+   - To change profile image, you only need to click my profile image.
+5. **Notifications**
+   - Allow Chrome notifications when prompted to receive message alerts.
+6. **Css Animations**
+   - There is animation with my custom alert, it will get bigger when it shows.
+   - Also, if you hover the buttons in toolbar and channel list, it will getting bigger to highlight what button you are going to push. (TA says button hover is not an animation, but I referred to the 4th part of video attached to the ppt)
+7. **RWD**
+   - If you in the mobile, there is a extra button (hamburger button) to on/off the joined channel list.
+   - Also, the size of interface or the font-size is changed.
+   - There is nothing being hidden.
+8. **Unsend Message**
+   - Long‑press (mobile) or right‑click (desktop) your own message and confirm removal.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Web Page Link
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    https://ss-mid-912fd.firebaseapp.com/
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## Github Link
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    https://github.com/Bearddy/mid_project
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+<style>
+  table th { text-align: left; }
+</style>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
