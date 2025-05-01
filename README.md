@@ -83,6 +83,16 @@
 
 ---
 
+## How to Setup
+
+**If you downloaded from FTP**
+   - Unzip my project, and open the folder with terminal.
+   - In the terminal, type "npm install". After downloading is done, type "npm run start" to run in the localhost.
+
+**If you want to clone from my github**
+   - In the terminal, type "git clone https://github.com/Bearddy/mid_project.git".
+   - And type "cd mid_project".
+   - The last step is same as downloading from FTP, type "npm install" and "npm run start".
 
 ## Web Page Link
 
